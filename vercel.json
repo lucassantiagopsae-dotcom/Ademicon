@@ -1,6 +1,6 @@
 {
-  "buildCommand": "cd Infraestrutura && npm run build",
-  "outputDirectory": "Infraestrutura/public_dist",
+  "buildCommand": "npm run build",
+  "outputDirectory": "public_dist",
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [

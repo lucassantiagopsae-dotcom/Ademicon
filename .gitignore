@@ -14,16 +14,16 @@ desktop.ini
 # Generated/build output
 dist/
 build/
-Infraestrutura/public_dist/
+public_dist/
 .cache/
 
 # Local Codex/agent workspace
 .agents/
 .claude/
 
-# Local archive/reference files inside the deploy folder
-Infraestrutura/_arquivo/
-Infraestrutura/_materiais-brutos/
+# Local archive/reference files
+_arquivo/
+_materiais-brutos/
 
 # Local thumbnail contact sheet used only for visual review
-Infraestrutura/assets/testimonials/_preview.jpg
+assets/testimonials/_preview.jpg
