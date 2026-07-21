@@ -1,0 +1,19 @@
+# Keep Vercel uploads focused on the deployable static site.
+node_modules/
+.git/
+.vercel/
+.env
+.env.*
+public_dist/
+
+# Local archive/reference folders
+_arquivo/
+_materiais-brutos/
+
+# Local-only files
+assets/testimonials/_preview.jpg
+*.psd
+*.mov
+*.MOV
+*.mp4
+*.log

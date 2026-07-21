@@ -14,24 +14,16 @@ desktop.ini
 # Generated/build output
 dist/
 build/
-public_dist/
+Infraestrutura/public_dist/
 .cache/
 
-# Raw production material that should not go to GitHub/Vercel
-\#post-ademicon/
+# Local Codex/agent workspace
 .agents/
 .claude/
-_auditoria_visual/
-Cortes-Video-Bianca*/
-Criativos/
-Depoimentos-Clientes-Video/
-gerar-guia-identidade-visual/
-imagens-socio-talentos/
-skills-lock.json
 
-# Legacy/reference files inside the deploy folder
+# Local archive/reference files inside the deploy folder
 Infraestrutura/_arquivo/
-Infraestrutura/
+Infraestrutura/_materiais-brutos/
 
 # Local thumbnail contact sheet used only for visual review
-assets/testimonials/_preview.jpg
+Infraestrutura/assets/testimonials/_preview.jpg
