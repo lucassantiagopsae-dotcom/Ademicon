@@ -2,7 +2,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, extname, join, relative, resolve, sep } from "node:path";
 
 const root = resolve(".");
-const ignoredDirectories = new Set(["_arquivo", "node_modules", ".git", ".vercel"]);
+const ignoredDirectories = new Set(["_arquivo", "public_dist", "node_modules", ".git", ".vercel"]);
 
 function listHtmlFiles(directory) {
   const files = [];
