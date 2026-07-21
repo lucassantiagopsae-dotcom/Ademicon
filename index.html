@@ -91,11 +91,11 @@
 
     .hero {
       position: relative;
-      min-height: 100svh;
+      min-height: 88svh;
       overflow: hidden;
       display: grid;
       align-items: center;
-      padding: 116px 0 96px;
+      padding: 112px 0 116px;
       background: var(--black);
       isolation: isolate;
     }
@@ -131,9 +131,36 @@
     .hero-content {
       max-width: 620px;
       display: grid;
-      gap: 24px;
+      gap: 22px;
       transform: translateY(-18px);
       animation: enterUp 720ms ease both;
+    }
+
+    .hero-kicker {
+      width: fit-content;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      color: rgba(255, 255, 255, 0.82);
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: var(--radius);
+      -webkit-backdrop-filter: blur(18px);
+      backdrop-filter: blur(18px);
+      font-family: "Space Mono", monospace;
+      font-size: 12px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .hero-kicker::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--red);
+      box-shadow: 0 0 18px rgba(237, 28, 36, 0.8);
     }
 
     .eyebrow {
@@ -170,15 +197,40 @@
       line-height: 0.98;
       font-weight: 900;
       letter-spacing: 0;
+      color: var(--white);
       text-wrap: balance;
     }
 
     .hero-lead {
       max-width: 560px;
-      color: var(--muted);
+      color: rgba(255, 255, 255, 0.74);
       font-size: clamp(18px, 2vw, 22px);
       line-height: 1.5;
       text-wrap: pretty;
+    }
+
+    .hero-points {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      max-width: 570px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .hero-points li {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 0 12px;
+      color: rgba(255, 255, 255, 0.82);
+      background: rgba(0, 0, 0, 0.28);
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: var(--radius);
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.2;
     }
 
     .hero-actions {
@@ -255,10 +307,10 @@
     .numbers {
       position: relative;
       z-index: 6;
-      padding: 0 0 92px;
-      margin-top: -148px;
+      padding: 0 0 78px;
+      margin-top: -78px;
       background:
-        linear-gradient(180deg, transparent 0 92px, var(--black) 92px 100%);
+        linear-gradient(180deg, transparent 0 50px, var(--black) 50px 100%);
     }
 
     .numbers .shell {
@@ -281,8 +333,8 @@
       align-content: center;
       gap: 14px;
       padding: 28px;
-      background: rgba(0, 0, 0, 0.18);
-      border: 1px solid rgba(255, 255, 255, 0.07);
+      background: rgba(8, 8, 8, 0.58);
+      border: 1px solid rgba(255, 255, 255, 0.13);
       border-radius: var(--radius);
       -webkit-backdrop-filter: blur(34px) saturate(1.22);
       backdrop-filter: blur(34px) saturate(1.22);
@@ -298,7 +350,7 @@
       z-index: 0;
       background:
         linear-gradient(135deg, rgba(255, 255, 255, 0.105), transparent 46%),
-        rgba(0, 0, 0, 0.14);
+        rgba(20, 20, 20, 0.34);
       -webkit-backdrop-filter: blur(34px) saturate(1.22);
       backdrop-filter: blur(34px) saturate(1.22);
       pointer-events: none;
@@ -356,7 +408,7 @@
 
     .stat-card span {
       max-width: 250px;
-      color: var(--muted);
+      color: rgba(255, 255, 255, 0.72);
       font-size: 15px;
       line-height: 1.42;
       text-wrap: pretty;
@@ -1049,7 +1101,7 @@
 
     @media (max-width: 960px) {
       .hero {
-        min-height: 760px;
+        min-height: 720px;
         align-items: center;
       }
 
@@ -1098,17 +1150,31 @@
       }
 
       .hero {
-        min-height: 700px;
+        min-height: 680px;
         padding: 98px 0 88px;
       }
 
       .hero-content {
         transform: translateY(-8px);
+        max-width: 330px;
       }
 
       h1 {
-        font-size: clamp(34px, 9.8vw, 42px);
-        line-height: 1;
+        font-size: clamp(30px, 8.4vw, 36px);
+        line-height: 1.03;
+        max-width: 330px;
+      }
+
+      .hero-lead {
+        max-width: 320px;
+        font-size: 16px;
+        line-height: 1.45;
+      }
+
+      .hero-kicker,
+      .hero-points,
+      .hero-actions {
+        max-width: 330px;
       }
 
       .hero::before {
@@ -1120,11 +1186,20 @@
         width: 100%;
       }
 
+      .hero-points {
+        gap: 8px;
+      }
+
+      .hero-points li {
+        width: 100%;
+        justify-content: center;
+      }
+
       .numbers {
         padding: 0 0 72px;
-        margin-top: -118px;
+        margin-top: -54px;
         background:
-          linear-gradient(180deg, transparent 0 76px, var(--black) 76px 100%);
+          linear-gradient(180deg, transparent 0 34px, var(--black) 34px 100%);
       }
 
       .stats-grid {
@@ -1134,7 +1209,7 @@
       .stat-card {
         min-height: 104px;
         padding: 24px;
-        background: rgba(0, 0, 0, 0.28);
+        background: rgba(8, 8, 8, 0.68);
       }
 
       .stat-top {
@@ -1192,7 +1267,7 @@
 
     @media (max-width: 390px) {
       h1 {
-        font-size: 33px;
+        font-size: 30px;
       }
 
       h2 {
@@ -1200,7 +1275,7 @@
       }
 
       .hero {
-        min-height: 660px;
+        min-height: 640px;
       }
     }
   </style>
@@ -1216,8 +1291,14 @@
     <section class="hero">
       <div class="shell">
         <div class="hero-content">
+          <p class="hero-kicker">Para brasileiros no exterior</p>
           <h1>Diagnóstico patrimonial para investir no Brasil.</h1>
-          <p class="hero-lead">Responda poucas perguntas e descubra se faz sentido conversar com uma especialista Ademicon sobre imóvel, investimento ou planejamento familiar.</p>
+          <p class="hero-lead">Em poucos minutos, organize seu objetivo e veja se faz sentido conversar com uma especialista Ademicon sobre imóvel, investimento ou planejamento familiar.</p>
+          <ul class="hero-points" aria-label="O que o diagnóstico organiza">
+            <li>Objetivo no Brasil</li>
+            <li>Faixa mensal possível</li>
+            <li>Contato humano no WhatsApp</li>
+          </ul>
           <div class="hero-actions">
             <a class="btn btn-primary" href="/formulario">
               Começar meu diagnóstico
@@ -1245,7 +1326,7 @@
               </span>
               <strong>600+</strong>
             </div>
-            <span>clientes acompanhados na construção de patrimônio.</span>
+            <span>clientes acompanhados em decisões patrimoniais.</span>
           </div>
           <div class="stat-card">
             <div class="stat-top">
@@ -1257,7 +1338,7 @@
               </span>
               <strong>6</strong>
             </div>
-            <span>perguntas para entender objetivo, prazo e momento.</span>
+            <span>perguntas para entender objetivo, país e capacidade mensal.</span>
           </div>
           <div class="stat-card">
             <div class="stat-top">
@@ -1269,7 +1350,7 @@
               </span>
               <strong>1:1</strong>
             </div>
-            <span>atendimento humano depois do formulário.</span>
+            <span>conversa individual depois do formulário.</span>
           </div>
         </div>
       </div>
