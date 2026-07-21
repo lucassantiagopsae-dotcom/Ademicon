@@ -4,6 +4,7 @@ node_modules/
 .vercel/
 .env
 .env.*
+public_dist/
 
 # Raw creative/source folders
 \#post-ademicon/

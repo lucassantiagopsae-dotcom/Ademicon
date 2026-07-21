@@ -30,8 +30,8 @@ git remote set-url origin https://github.com/lucassantiagopsae-dotcom/Ademicon.g
 1. Importe o repositorio no Vercel.
 2. Use a raiz do repositorio como Root Directory.
 3. Framework Preset: `Other`.
-4. Build Command: vazio.
-5. Output Directory: vazio ou `.`.
+4. Build Command: `npm run build`.
+5. Output Directory: `public_dist`.
 6. Deploy.
 
 ## Rotas principais

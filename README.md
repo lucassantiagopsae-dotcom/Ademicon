@@ -33,10 +33,16 @@ http://localhost:3000
 npm run check
 ```
 
+## Gerar saida de deploy
+
+```bash
+npm run build
+```
+
 ## Deploy no Vercel
 
 Conecte este repositorio no Vercel usando a raiz do repositorio como Root Directory. Framework preset: `Other`.
 
-Build Command: deixe vazio.
+Build Command: `npm run build`.
 
-Output Directory: deixe vazio ou `.`.
+Output Directory: `public_dist`.

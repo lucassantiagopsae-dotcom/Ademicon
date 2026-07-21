@@ -14,6 +14,7 @@ desktop.ini
 # Generated/build output
 dist/
 build/
+public_dist/
 .cache/
 
 # Raw production material that should not go to GitHub/Vercel

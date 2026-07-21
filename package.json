@@ -4,6 +4,7 @@
   "private": true,
   "description": "Landing page e formulario de diagnostico patrimonial da Ademicon.",
   "scripts": {
+    "build": "node scripts/build-static-site.mjs",
     "check": "node scripts/check-static-site.mjs",
     "start": "node scripts/serve-static.mjs"
   },
