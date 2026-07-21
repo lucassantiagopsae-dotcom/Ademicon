@@ -26,20 +26,11 @@ Criativos/
 Depoimentos-Clientes-Video/
 gerar-guia-identidade-visual/
 imagens-socio-talentos/
-Insfraestrutura/
 skills-lock.json
 
-# Keep the deploy-ready static site at the repository root
-!assets/
-!assets/**
-!index.html
-!formulario-ademicon-typeform.html
-!obrigado.html
-!links-bianca-chechelaki.html
-!depoimentos-ademicon.html
-!package.json
-!vercel.json
-!README.md
-!DEPLOY.md
-!scripts/
-!scripts/**
+# Legacy/reference files inside the deploy folder
+Infraestrutura/_arquivo/
+
+# Local thumbnail contact sheet used only for visual review
+assets/testimonials/_preview.jpg
+Infraestrutura/assets/testimonials/_preview.jpg

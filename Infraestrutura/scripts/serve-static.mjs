@@ -23,10 +23,10 @@ const mimeTypes = {
 const cleanRoutes = {
   "/": "/index.html",
   "/diagnostico": "/index.html",
-  "/formulario": "/formulario-ademicon-typeform.html",
-  "/obrigado": "/obrigado.html",
-  "/links": "/links-bianca-chechelaki.html",
-  "/depoimentos": "/depoimentos-ademicon.html"
+  "/formulario": "/formulario/index.html",
+  "/obrigado": "/obrigado/index.html",
+  "/links": "/links/index.html",
+  "/depoimentos": "/depoimentos/index.html"
 };
 
 function resolveRequest(urlPath) {
@@ -44,8 +44,10 @@ function resolveRequest(urlPath) {
   }
 
   if (!existsSync(filePath) && !extname(filePath)) {
+    const indexPath = join(filePath, "index.html");
     const htmlPath = `${filePath}.html`;
-    if (existsSync(htmlPath)) filePath = htmlPath;
+    if (existsSync(indexPath)) filePath = indexPath;
+    else if (existsSync(htmlPath)) filePath = htmlPath;
   }
 
   return filePath;

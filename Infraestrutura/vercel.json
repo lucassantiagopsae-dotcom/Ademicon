@@ -31,28 +31,32 @@
       "source": "/apresentacao-diagnostico-patrimonial.html",
       "destination": "/",
       "permanent": true
+    },
+    {
+      "source": "/formulario-ademicon-typeform.html",
+      "destination": "/formulario",
+      "permanent": true
+    },
+    {
+      "source": "/obrigado.html",
+      "destination": "/obrigado",
+      "permanent": true
+    },
+    {
+      "source": "/links-bianca-chechelaki.html",
+      "destination": "/links",
+      "permanent": true
+    },
+    {
+      "source": "/depoimentos-ademicon.html",
+      "destination": "/depoimentos",
+      "permanent": true
     }
   ],
   "rewrites": [
     {
       "source": "/diagnostico",
       "destination": "/index.html"
-    },
-    {
-      "source": "/formulario",
-      "destination": "/formulario-ademicon-typeform.html"
-    },
-    {
-      "source": "/obrigado",
-      "destination": "/obrigado.html"
-    },
-    {
-      "source": "/links",
-      "destination": "/links-bianca-chechelaki.html"
-    },
-    {
-      "source": "/depoimentos",
-      "destination": "/depoimentos-ademicon.html"
     }
   ]
 }
