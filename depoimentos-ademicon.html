@@ -1,0 +1,706 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Depoimentos de clientes | Ademicon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red: #ED1C24;
+      --red-bright: #FF1726;
+      --wine: #B70915;
+      --wine-dark: #7E0810;
+      --black: #1E1E1E;
+      --text: #414042;
+      --muted: #939598;
+      --line: #dcddde;
+      --soft: #F3F2F0;
+      --white: #ffffff;
+      --shadow: 0 22px 60px rgba(30, 30, 30, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      min-height: 100%;
+      background: var(--soft);
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--text);
+      font-family: "Poppins", "Axiforma", "Inter", "Montserrat", Arial, sans-serif;
+      background:
+        radial-gradient(80% 60% at 50% -10%, rgba(237, 28, 36, 0.10), transparent 60%),
+        linear-gradient(180deg, #ffffff 0%, #f5f4f2 70%);
+    }
+
+    button { font: inherit; }
+
+    /* Faixa de configuração — remover quando a hospedagem dos vídeos e as aprovações estiverem prontas. */
+    .draft-banner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px 16px;
+      color: var(--wine-dark);
+      background: #FFF3D6;
+      border-bottom: 1px solid #F0D793;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .shell {
+      width: min(1240px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 52px 0 80px;
+    }
+
+    /* ---------- Hero ---------- */
+    header.hero {
+      display: grid;
+      justify-items: center;
+      gap: 16px;
+      max-width: 760px;
+      margin: 0 auto 44px;
+      text-align: center;
+    }
+
+    .logo { width: 168px; height: auto; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 8px 0 0;
+      color: var(--red);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before,
+    .eyebrow::after {
+      content: "";
+      width: 28px;
+      height: 3px;
+      border-radius: 3px;
+      background: var(--red);
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--black);
+      font-size: clamp(30px, 5vw, 44px);
+      line-height: 1.08;
+      font-weight: 900;
+    }
+
+    .lead {
+      margin: 0;
+      color: var(--text);
+      font-size: 17px;
+      line-height: 1.6;
+    }
+
+    .trust {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 10px 22px;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .trust strong { color: var(--black); }
+
+    .trust span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .trust span::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--red);
+    }
+
+    /* ---------- Grid de vídeos verticais ---------- */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(236px, 1fr));
+      gap: 26px;
+    }
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: 0 14px 30px rgba(30, 30, 30, 0.06);
+      transition: transform 200ms ease, box-shadow 200ms ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+
+    .reel {
+      position: relative;
+      aspect-ratio: 9 / 16;
+      display: block;
+      width: 100%;
+      overflow: hidden;
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+      background:
+        radial-gradient(120% 90% at 100% 0%, rgba(255, 23, 38, 0.42), transparent 55%),
+        linear-gradient(155deg, var(--black) 0%, #2b2b2b 55%, var(--black) 100%);
+    }
+
+    .reel video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: #000;
+    }
+
+    .reel-scrim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.28) 0%, transparent 30%, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+    }
+
+    .reel-initials {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 46px;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+    }
+
+    .play-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 58px;
+      height: 58px;
+      display: grid;
+      place-items: center;
+      color: var(--red);
+      background: var(--white);
+      border-radius: 999px;
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.36);
+      transition: transform 180ms ease;
+    }
+
+    .reel:hover .play-btn { transform: translate(-50%, -50%) scale(1.08); }
+
+    .media-tag {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      padding: 6px 12px;
+      color: var(--white);
+      background: rgba(0, 0, 0, 0.42);
+      backdrop-filter: blur(4px);
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .duration {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      padding: 4px 9px;
+      color: var(--white);
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .card-body {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 10px;
+      padding: 18px 18px 20px;
+    }
+
+    .card-title {
+      margin: 0;
+      color: var(--black);
+      font-size: 16px;
+      line-height: 1.3;
+      font-weight: 800;
+    }
+
+    .card-desc {
+      margin: 0;
+      color: var(--text);
+      font-size: 13.5px;
+      line-height: 1.55;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .person {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: auto;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      color: var(--white);
+      background: linear-gradient(135deg, var(--red-bright), var(--wine));
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .person-info { display: grid; gap: 1px; min-width: 0; }
+    .person-name { color: var(--black); font-size: 13.5px; font-weight: 800; }
+    .person-meta { color: var(--muted); font-size: 12px; font-weight: 600; }
+
+    /* ---------- CTA ---------- */
+    .cta {
+      display: grid;
+      justify-items: center;
+      gap: 16px;
+      margin: 72px auto 0;
+      padding: 46px 44px;
+      max-width: 720px;
+      text-align: center;
+      color: var(--white);
+      background:
+        radial-gradient(120% 140% at 0% 0%, rgba(255, 255, 255, 0.14), transparent 45%),
+        linear-gradient(135deg, var(--red-bright), var(--wine));
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+    }
+
+    .cta h2 { margin: 0; font-size: 26px; font-weight: 800; }
+    .cta p { margin: 0; color: rgba(255, 255, 255, 0.92); font-size: 15px; line-height: 1.5; }
+
+    .btn-primary {
+      padding: 0 30px;
+      height: 52px;
+      color: var(--red);
+      background: var(--white);
+      border: 0;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 900;
+      font-size: 15px;
+      transition: transform 160ms ease;
+    }
+
+    .btn-primary:hover { transform: translateY(-1px); }
+
+    /* ---------- Lightbox vertical ---------- */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+      background: rgba(15, 15, 15, 0.82);
+    }
+
+    .modal-overlay.is-visible { display: flex; }
+
+    .modal {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      width: min(390px, 100%);
+      max-height: 92vh;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      z-index: 2;
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      color: var(--black);
+      background: var(--white);
+      border: 0;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 18px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    .modal-stage {
+      aspect-ratio: 9 / 16;
+      max-height: 78vh;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .modal-stage video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+    }
+
+    .modal-placeholder {
+      display: grid;
+      place-content: center;
+      justify-items: center;
+      gap: 10px;
+      height: 100%;
+      padding: 28px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.85);
+      background: linear-gradient(155deg, var(--black), #2b2b2b);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .modal-caption {
+      margin-top: 14px;
+      color: var(--white);
+      text-align: center;
+    }
+
+    .modal-caption strong { display: block; font-size: 16px; font-weight: 800; }
+    .modal-caption span { color: rgba(255, 255, 255, 0.75); font-size: 13px; font-weight: 600; }
+
+    @media (max-width: 520px) {
+      .grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+      .card-body { padding: 14px; }
+      .card-title { font-size: 14px; }
+      .card-desc { font-size: 12.5px; -webkit-line-clamp: 3; }
+      .cta { padding: 36px 22px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="draft-banner" id="draftBanner">
+    Pré-visualização — falta apenas apontar a hospedagem dos vídeos (VIDEO_BASE) e confirmar as aprovações. Ver notas no fim do arquivo.
+  </div>
+
+  <main class="shell">
+    <header class="hero">
+      <img class="logo" src="assets/logo-ademicon.png" alt="Ademicon consórcio e investimento">
+      <p class="eyebrow">Depoimentos</p>
+      <h1>Quem escolheu a Ademicon conta como foi.</h1>
+      <p class="lead">Histórias reais de clientes que planejaram, investiram e realizaram seus objetivos — muitos deles morando fora do Brasil.</p>
+      <div class="trust">
+        <span><strong>12</strong>&nbsp;depoimentos reais</span>
+        <span>Brasil, Portugal e Bélgica</span>
+        <span>Consórcio &amp; investimento</span>
+      </div>
+    </header>
+
+    <section class="grid" id="grid" aria-label="Depoimentos em vídeo"></section>
+
+    <section class="cta">
+      <h2>Quer ser o próximo depoimento?</h2>
+      <p>Fale com um especialista Ademicon e descubra o melhor caminho para o seu objetivo.</p>
+      <button class="btn-primary" type="button" id="ctaBtn">Falar com um especialista</button>
+    </section>
+  </main>
+
+  <div class="modal-overlay" id="modalOverlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Depoimento em vídeo">
+      <button class="modal-close" type="button" id="modalClose" aria-label="Fechar">✕</button>
+      <div class="modal-stage" id="modalStage"></div>
+      <div class="modal-caption" id="modalCaption"></div>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================================
+       CONFIGURAÇÃO — preencher antes de publicar
+       =========================================================================
+       VIDEO_BASE: URL da pasta onde os vídeos estão hospedados (com a barra
+       final). Cada depoimento usa VIDEO_BASE + o campo "file". Enquanto ficar
+       vazio, os cards mostram uma prévia (iniciais + play) sem carregar vídeo.
+       Ex.: "https://cdn.ademicon.com/depoimentos/"
+
+       IMPORTANTE: use arquivos .mp4 (H.264). Os originais .MOV do Amaro,
+       Anselmo, Marcelo, Marina e Shirley precisam ser convertidos para .mp4,
+       pois navegadores (Chrome/Firefox) não tocam .MOV.
+    */
+    const VIDEO_BASE = "";
+
+    // Link do especialista (WhatsApp). Ex.: "https://wa.me/55XXXXXXXXXXX"
+    const CTA_URL = "";
+
+    // Um card por cliente. duracao = "m:ss" (mostrada no canto do vídeo).
+    const TESTIMONIALS = [
+      {
+        file: "angela.mp4",
+        nome: "Ângela Almeida",
+        local: "Portugal",
+        duracao: "0:39",
+        titulo: "Pago a parcela com dois dias de trabalho",
+        descricao: "Moro em Portugal há quatro anos e conheço a Bianca há muitos anos. Fiz um consórcio com ela e conseguimos pagar a nossa parcela com dois dias de trabalho. Indicamos muito o consórcio dela, da Ademicon."
+      },
+      {
+        file: "marcelo.mp4",
+        nome: "Marcelo",
+        local: "Bruxelas, Bélgica",
+        duracao: "2:47",
+        titulo: "Morando fora, resolvi tudo pelo WhatsApp",
+        descricao: "Moro em Bruxelas há sete anos. Pesquisei a melhor empresa de consórcio do Brasil e encontrei a Ademicon. Mesmo morando fora, a Bianca arrumou tudo pelo WhatsApp e por telefone — assinaturas, contratos, todas as dúvidas. Fui contemplado, sou um cliente realizado e já indiquei para meus amigos, familiares e minha esposa."
+      },
+      {
+        file: "shirley.mp4",
+        nome: "Shirley",
+        local: "",
+        duracao: "1:07",
+        titulo: "Vendi a carta em 48h com o dinheiro na conta",
+        descricao: "Adquiri dois consórcios com a Bianca e, para minha surpresa, um deles foi contemplado. Como fiz para investimento, conversei com a Jéssica e ela me deu todo o suporte. Passaram os documentos rapidinho, assinei e dentro de 48 horas eu já tinha vendido minha carta e estava com o dinheiro na conta. É fácil mesmo, bem tranquilo."
+      },
+      {
+        file: "marina.mp4",
+        nome: "Marina",
+        local: "",
+        duracao: "0:59",
+        titulo: "Muito mais barato que financiamento",
+        descricao: "A Bianca é excepcional do início ao fim: desde a primeira reunião, depois da contratação, durante o processo de contemplação, sempre à disposição para explicar e tirar todas as dúvidas. O consórcio é uma maneira muito prática e vantajosa de conseguir um bem — comparado com um empréstimo ou financiamento, é infinitamente mais barato."
+      },
+      {
+        file: "quellison.mp4",
+        nome: "Quellison",
+        local: "Bélgica",
+        duracao: "0:35",
+        titulo: "Dois investimentos e vindo o terceiro",
+        descricao: "Moro na Bélgica há seis anos e durante esse período já fiz dois investimentos com a Bianca. Recomendo os serviços dela pela atenção e pelo cuidado com os clientes. Agora estou indo para um investimento maior, junto com o meu filho. Com apenas um dia de trabalho eu pago o meu investimento."
+      },
+      {
+        file: "amaro.mp4",
+        nome: "Amaro",
+        local: "",
+        duracao: "0:30",
+        titulo: "Contemplado depois de 18 parcelas",
+        descricao: "Comprei um consórcio com a Bianca e, depois de umas 18 parcelas, fui contemplado. Eles faziam o lance pela administração — a Jéssica cuida da parte administrativa. Quero agradecer a forma como eles trabalham, pela dedicação deles."
+      },
+      {
+        file: "eliel.mp4",
+        nome: "Eliel",
+        local: "Bélgica",
+        duracao: "0:28",
+        titulo: "Um dia de trabalho paga meu consórcio",
+        descricao: "Moro na Bélgica há quatro anos e através da Bianca tive a oportunidade de conhecer o consórcio. Foi um atendimento profissional, muito transparente e objetivo. Com um dia de serviço aqui eu pago tranquilamente o consórcio — é uma das minhas opções para atingir a liberdade financeira. Sou muito grato e recomendo demais."
+      },
+      {
+        file: "evelin.mp4",
+        nome: "Evelyn",
+        local: "Portugal",
+        duracao: "0:24",
+        titulo: "Mais de 10 anos de confiança",
+        descricao: "Moro em Portugal há dois anos e com dois dias de trabalho já pago a parcela do meu consórcio com a Ademicon. Conheço a Bianca há mais de 10 anos, é uma pessoa de confiança — toda a minha família já fez consórcio com ela. Super indico."
+      },
+      {
+        file: "gaspar.mp4",
+        nome: "Gaspar",
+        local: "Portugal",
+        duracao: "1:03",
+        titulo: "Pensar no futuro compensa",
+        descricao: "Moro em Portugal há uns quatro anos e conheço a Bianca de longa data. Com um dia e meio, no máximo dois dias de trabalho, eu pago o meu consórcio. É investimento a longo prazo, sim, mas você tem que pensar no seu futuro. Compensa, vale a pena. Super indico."
+      },
+      {
+        file: "anselmo.mp4",
+        nome: "Anselmo",
+        local: "",
+        duracao: "0:26",
+        titulo: "Vendi minha carta e recebi tudo certinho",
+        descricao: "Fiz o consórcio porque vi uma boa oportunidade de investimento. Sempre fui bem orientado e recebi todo o suporte necessário. Optei por vender minha carta e recebi tudo certinho, conforme o combinado. Foi simples e tranquilo. Recomendo a Bianca e a Ademicon pela agilidade, transparência e profissionalismo."
+      },
+      {
+        file: "wilian-portugal.mp4",
+        nome: "Wilian",
+        local: "Portugal",
+        duracao: "0:16",
+        titulo: "Diversifiquei meus investimentos",
+        descricao: "Vivo em Portugal há sete anos e estou fazendo um consórcio com a Bianca para diversificar os meus investimentos. Com mais ou menos dois dias de trabalho eu pago o meu consórcio."
+      },
+      {
+        file: "willian-belgica.mp4",
+        nome: "Willian",
+        local: "Bélgica",
+        duracao: "0:22",
+        titulo: "Ganho em euro, pago em real",
+        descricao: "Moro na Bélgica há dois anos e meio e fiz o consórcio com a Bianca. Estou muito satisfeito porque com um dia e meio de trabalho consigo pagar o consórcio do meu imóvel, com o câmbio a meu favor: ganho em euro e pago em real."
+      }
+    ];
+
+    const grid = document.querySelector("#grid");
+    const modalOverlay = document.querySelector("#modalOverlay");
+    const modalStage = document.querySelector("#modalStage");
+    const modalCaption = document.querySelector("#modalCaption");
+    const modalClose = document.querySelector("#modalClose");
+    const ctaBtn = document.querySelector("#ctaBtn");
+
+    function videoUrl(item) {
+      return VIDEO_BASE ? VIDEO_BASE + item.file : "";
+    }
+
+    function initials(name) {
+      return name
+        .split(" ")
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((part) => part[0].toUpperCase())
+        .join("");
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>"]/g, (ch) => (
+        { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]
+      ));
+    }
+
+    function renderCard(item, index) {
+      const card = document.createElement("article");
+      card.className = "card";
+
+      const url = videoUrl(item);
+      // Miniatura: vídeo real (frame inicial) quando há hospedagem; senão, prévia com iniciais.
+      const thumb = url
+        ? `<video src="${escapeHtml(url)}#t=0.3" preload="metadata" muted playsinline></video>`
+        : `<div class="reel-initials" aria-hidden="true">${initials(item.nome)}</div>`;
+
+      const localTag = item.local
+        ? `<span class="media-tag">${escapeHtml(item.local)}</span>`
+        : `<span class="media-tag">Depoimento</span>`;
+
+      card.innerHTML = `
+        <button class="reel" type="button" data-index="${index}" aria-label="Assistir depoimento de ${escapeHtml(item.nome)}">
+          ${thumb}
+          <span class="reel-scrim" aria-hidden="true"></span>
+          ${localTag}
+          <span class="duration" aria-hidden="true">${escapeHtml(item.duracao || "")}</span>
+          <span class="play-btn" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </span>
+        </button>
+        <div class="card-body">
+          <h3 class="card-title">${escapeHtml(item.titulo)}</h3>
+          <p class="card-desc">${escapeHtml(item.descricao)}</p>
+          <div class="person">
+            <span class="avatar" aria-hidden="true">${initials(item.nome)}</span>
+            <div class="person-info">
+              <p class="person-name">${escapeHtml(item.nome)}</p>
+              <p class="person-meta">${escapeHtml(item.local || "Cliente Ademicon")}</p>
+            </div>
+          </div>
+        </div>
+      `;
+
+      return card;
+    }
+
+    function renderGrid() {
+      grid.innerHTML = "";
+      TESTIMONIALS.forEach((item, index) => grid.appendChild(renderCard(item, index)));
+    }
+
+    function openModal(index) {
+      const item = TESTIMONIALS[index];
+      const url = videoUrl(item);
+
+      modalStage.innerHTML = url
+        ? `<video src="${escapeHtml(url)}" controls autoplay playsinline></video>`
+        : `<div class="modal-placeholder">
+             <strong>Prévia</strong>
+             <span>Defina <code>VIDEO_BASE</code> no início do script para tocar o vídeo de ${escapeHtml(item.nome)} (arquivo ${escapeHtml(item.file)}).</span>
+           </div>`;
+
+      modalCaption.innerHTML = `<strong>${escapeHtml(item.titulo)}</strong><span>${escapeHtml(item.nome)}${item.local ? " • " + escapeHtml(item.local) : ""}</span>`;
+
+      modalOverlay.classList.add("is-visible");
+      modalOverlay.setAttribute("aria-hidden", "false");
+    }
+
+    function closeModal() {
+      modalOverlay.classList.remove("is-visible");
+      modalOverlay.setAttribute("aria-hidden", "true");
+      modalStage.innerHTML = "";
+      modalCaption.innerHTML = "";
+    }
+
+    grid.addEventListener("click", (event) => {
+      const trigger = event.target.closest("[data-index]");
+      if (trigger) {
+        openModal(Number(trigger.dataset.index));
+      }
+    });
+
+    modalClose.addEventListener("click", closeModal);
+    modalOverlay.addEventListener("click", (event) => {
+      if (event.target === modalOverlay) {
+        closeModal();
+      }
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeModal();
+      }
+    });
+
+    ctaBtn.addEventListener("click", () => {
+      if (CTA_URL) {
+        window.open(CTA_URL, "_blank", "noopener");
+      }
+    });
+
+    // Esconde a faixa de aviso automaticamente quando a hospedagem já estiver configurada.
+    if (VIDEO_BASE) {
+      const banner = document.querySelector("#draftBanner");
+      if (banner) banner.remove();
+    }
+
+    renderGrid();
+  </script>
+</body>
+</html>

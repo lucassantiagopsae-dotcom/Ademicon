@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bianca Chechelaki | Especialista em Consórcios Ademicon</title>
+  <meta name="description" content="Transforme sua renda no exterior em patrimônio no Brasil. Agende uma consultoria com a Bianca Chechelaki, especialista em consórcios da Ademicon.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red: #ED1C24;
+      --red-bright: #FF1726;
+      --wine: #B70915;
+      --wine-dark: #7E0810;
+      --black: #1E1E1E;
+      --text: #414042;
+      --muted: #939598;
+      --line: #dcddde;
+      --soft: #F3F2F0;
+      --white: #ffffff;
+      --shadow: 0 22px 60px rgba(30, 30, 30, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--wine-dark);
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: 40px 0 56px;
+      color: var(--white);
+      font-family: "Poppins", "Montserrat", Arial, sans-serif;
+      background:
+        radial-gradient(120% 70% at 50% 0%, var(--red-bright) 0%, var(--red) 38%, var(--wine) 74%, var(--wine-dark) 100%);
+      background-attachment: fixed;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .shell {
+      width: min(460px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    /* ---------- Cabeçalho ---------- */
+
+    .profile {
+      text-align: center;
+      margin-bottom: 34px;
+    }
+
+    .avatar {
+      width: 132px;
+      height: 132px;
+      margin: 0 auto 18px;
+      border-radius: 999px;
+      padding: 4px;
+      background: rgba(255, 255, 255, 0.28);
+      box-shadow: 0 18px 44px rgba(60, 4, 8, 0.42);
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 999px;
+      object-fit: cover;
+      object-position: center 22%;
+    }
+
+    .profile h1 {
+      margin: 0 0 6px;
+      font-size: 27px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+
+    .role {
+      margin: 0 0 16px;
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .tagline {
+      margin: 0 auto;
+      max-width: 21ch;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.45;
+      color: var(--white);
+    }
+
+    /* ---------- Botão de destaque ---------- */
+
+    .cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 36px;
+      padding: 20px 24px;
+      border-radius: 999px;
+      color: var(--wine-dark);
+      background: var(--white);
+      font-size: 17px;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 16px 38px rgba(60, 4, 8, 0.4);
+      transition: transform 0.16s ease, box-shadow 0.16s ease;
+    }
+
+    .cta:hover,
+    .cta:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 22px 46px rgba(60, 4, 8, 0.5);
+    }
+
+    .cta .cta-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      line-height: 1.2;
+    }
+
+    .cta .cta-phone {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--wine);
+    }
+
+    .cta svg {
+      flex: none;
+      width: 26px;
+      height: 26px;
+      fill: var(--wine-dark);
+    }
+
+    /* ---------- Seções de links ---------- */
+
+    .section-title {
+      margin: 0 0 14px;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .links {
+      list-style: none;
+      margin: 0 0 32px;
+      padding: 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .link {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 15px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.34);
+      border-radius: 999px;
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.1);
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.16s ease, border-color 0.16s ease, transform 0.16s ease;
+    }
+
+    .link:hover,
+    .link:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .link-icon {
+      flex: none;
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      background: var(--white);
+    }
+
+    .link-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--wine);
+    }
+
+    .link-label {
+      flex: 1;
+    }
+
+    .link-arrow {
+      flex: none;
+      width: 16px;
+      height: 16px;
+      fill: rgba(255, 255, 255, 0.6);
+    }
+
+    /* ---------- Rodapé ---------- */
+
+    footer {
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.62);
+    }
+
+    /* O logo é um PNG sem canal alpha (fundo claro sólido), por isso vai dentro
+       de um cartão branco em vez de solto sobre o vermelho. */
+    .footer-logo {
+      width: 132px;
+      margin: 0 auto 14px;
+      padding: 12px 16px;
+      border-radius: 16px;
+      background: var(--white);
+    }
+
+    .footer-logo img {
+      width: 100%;
+    }
+
+    @media (max-width: 380px) {
+      .profile h1 { font-size: 24px; }
+      .cta { font-size: 16px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+      .cta:hover, .link:hover { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="profile">
+      <div class="avatar">
+        <img src="assets/bianca-referencia-oficial.png" alt="Bianca Chechelaki">
+      </div>
+      <h1>Bianca Chechelaki</h1>
+      <p class="role">Especialista em Consórcios | Ademicon</p>
+      <p class="tagline">Transforme sua renda no exterior em patrimônio no Brasil.</p>
+    </section>
+
+    <!-- Botão de destaque. Número informado no briefing: +55 41 9853-8078 -->
+    <a class="cta" href="https://wa.me/554198538078" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.15h-.01a8.23 8.23 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.19 8.19 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.79.97-.14.16-.29.18-.54.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.43.13-.15.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.13-.56-1.35-.77-1.84-.2-.48-.4-.42-.56-.43h-.48c-.16 0-.43.06-.65.31-.22.25-.85.84-.85 2.05s.87 2.37.99 2.53c.12.17 1.72 2.62 4.16 3.68.58.25 1.03.4 1.39.51.58.19 1.11.16 1.53.1.47-.07 1.47-.6 1.67-1.18.21-.58.21-1.08.15-1.18-.06-.11-.22-.17-.47-.29Z"/>
+      </svg>
+      <span class="cta-text">
+        <span>Agende uma consultoria</span>
+        <span class="cta-phone">+55 41 9853-8078</span>
+      </span>
+    </a>
+
+    <h2 class="section-title">Contatos</h2>
+    <ul class="links">
+      <li>
+        <a class="link" href="https://mapapatrimonial.com.br/" target="_blank" rel="noopener">
+          <span class="link-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm6.92 6h-2.95a15.6 15.6 0 0 0-1.38-3.56A8.03 8.03 0 0 1 18.92 8ZM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96ZM4.26 14a8.1 8.1 0 0 1 0-4h3.38a16.6 16.6 0 0 0 0 4H4.26Zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56A7.99 7.99 0 0 1 5.08 16Zm2.95-8H5.08a7.99 7.99 0 0 1 4.33-3.56A15.6 15.6 0 0 0 8.03 8ZM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82A13.6 13.6 0 0 1 12 19.96ZM14.34 14H9.66a14.9 14.9 0 0 1 0-4h4.68a14.9 14.9 0 0 1 0 4Zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95a8.03 8.03 0 0 1-4.33 3.56ZM16.36 14a16.6 16.6 0 0 0 0-4h3.38a8.1 8.1 0 0 1 0 4h-3.38Z"/>
+            </svg>
+          </span>
+          <span class="link-label">Site — Mapa Patrimonial</span>
+          <svg class="link-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </li>
+      <li>
+        <a class="link" href="https://www.linkedin.com/in/bianca-chechelaki-b573465b/" target="_blank" rel="noopener">
+          <span class="link-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4.98 3.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5ZM3 9h4v12H3V9Zm7 0h3.83v1.64h.05c.53-.96 1.83-1.97 3.77-1.97 4.03 0 4.78 2.5 4.78 5.75V21h-4v-5.7c0-1.36-.03-3.11-1.9-3.11-1.9 0-2.19 1.48-2.19 3.01V21h-4V9Z"/>
+            </svg>
+          </span>
+          <span class="link-label">LinkedIn</span>
+          <svg class="link-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </li>
+    </ul>
+
+    <h2 class="section-title">Conheça a Ademicon</h2>
+    <ul class="links">
+      <li>
+        <a class="link" href="depoimentos-ademicon.html">
+          <span class="link-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 3C7.03 3 3 6.58 3 11c0 2.5 1.3 4.73 3.32 6.19L5.5 21l3.9-2.05c.82.2 1.7.3 2.6.3 4.97 0 9-3.58 9-8s-4.03-8-9-8Zm-3.2 9.3a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Zm3.2 0a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Zm3.2 0a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Z"/>
+            </svg>
+          </span>
+          <span class="link-label">Depoimentos de clientes</span>
+          <svg class="link-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </li>
+      <li>
+        <a class="link" href="https://www.youtube.com/watch?v=lPuVLsACKVs" target="_blank" rel="noopener">
+          <span class="link-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M21.58 7.19a2.5 2.5 0 0 0-1.77-1.77C18.25 5 12 5 12 5s-6.25 0-7.81.42a2.5 2.5 0 0 0-1.77 1.77C2 8.75 2 12 2 12s0 3.25.42 4.81a2.5 2.5 0 0 0 1.77 1.77C5.75 19 12 19 12 19s6.25 0 7.81-.42a2.5 2.5 0 0 0 1.77-1.77C22 15.25 22 12 22 12s0-3.25-.42-4.81ZM10 15V9l5.2 3-5.2 3Z"/>
+            </svg>
+          </span>
+          <span class="link-label">Quem é a Ademicon</span>
+          <svg class="link-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </li>
+    </ul>
+
+    <footer>
+      <div class="footer-logo"><img src="assets/logo-ademicon.png" alt="Ademicon"></div>
+      <p>Bianca Chechelaki — Especialista em Consórcios</p>
+    </footer>
+  </main>
+</body>
+</html>

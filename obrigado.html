@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Diagnóstico recebido | Ademicon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red: #ED1C24;
+      --red-bright: #FF1726;
+      --wine: #7E0810;
+      --whatsapp: #25D366;
+      --whatsapp-dark: #18B854;
+      --white: #ffffff;
+      --night: #070707;
+      --night-line: rgba(255, 255, 255, 0.16);
+      --night-muted: rgba(255, 255, 255, 0.66);
+      --font-archivo: 'Archivo', 'Poppins', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      --font-space-mono: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--night);
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 24px;
+      color: var(--white);
+      font-family: var(--font-archivo);
+      letter-spacing: 0;
+      background:
+        radial-gradient(900px 520px at 50% 0%, rgba(237, 28, 36, 0.18), rgba(7, 7, 7, 0) 62%),
+        linear-gradient(180deg, #050505 0%, #0b0b0b 58%, #050505 100%);
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .wrap {
+      width: min(760px, 100%);
+      display: grid;
+      justify-items: center;
+      gap: 52px;
+      text-align: center;
+    }
+
+    .success-splash {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: grid;
+      place-items: center;
+      color: var(--red);
+      background:
+        radial-gradient(620px 420px at 50% 50%, rgba(237, 28, 36, 0.13), rgba(7, 7, 7, 0) 68%),
+        rgba(7, 7, 7, 0.96);
+      pointer-events: none;
+      animation: splashOut 700ms ease 1550ms forwards;
+    }
+
+    .splash-mark {
+      width: 156px;
+      height: 156px;
+      display: grid;
+      place-items: center;
+      animation: splashMarkSettle 760ms cubic-bezier(0.2, 0.9, 0.2, 1) 980ms forwards;
+    }
+
+    .splash-ring,
+    .splash-check {
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .splash-ring {
+      opacity: 0.26;
+      stroke-width: 1.4;
+      stroke-dasharray: 151;
+      stroke-dashoffset: 151;
+      animation: drawRing 760ms ease-out 90ms forwards;
+    }
+
+    .splash-check {
+      stroke-width: 3.4;
+      stroke-dasharray: 32;
+      stroke-dashoffset: 32;
+      animation: drawCheck 560ms cubic-bezier(0.2, 0.9, 0.2, 1) 620ms forwards;
+    }
+
+    .brand-logo {
+      width: 92px;
+      height: auto;
+      object-fit: contain;
+      opacity: 0;
+      animation: enterUp 520ms ease 1660ms forwards;
+    }
+
+    .hero {
+      padding-top: 34px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 22px;
+      color: var(--night-muted);
+      font-family: var(--font-space-mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: enterUp 520ms ease 1880ms forwards;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 34px;
+      height: 1px;
+      background: var(--red);
+    }
+
+    .success-mark {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 18px;
+      color: var(--red);
+      opacity: 0;
+      animation: enterUp 520ms ease 1760ms forwards;
+    }
+
+    .success-ring,
+    .success-check {
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .success-ring {
+      opacity: 0.28;
+      stroke-width: 1.8;
+      stroke-dasharray: 151;
+      stroke-dashoffset: 151;
+      animation: drawRing 720ms ease-out 120ms forwards;
+    }
+
+    .success-check {
+      stroke-width: 3.3;
+      stroke-dasharray: 32;
+      stroke-dashoffset: 32;
+      animation: drawCheck 520ms cubic-bezier(0.2, 0.9, 0.2, 1) 620ms forwards;
+    }
+
+    @keyframes splashMarkSettle {
+      to {
+        transform: scale(0.62) translateY(-86px);
+      }
+    }
+
+    @keyframes splashOut {
+      to {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+
+    @keyframes drawRing {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @keyframes drawCheck {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @keyframes enterUp {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .success-splash {
+        display: none;
+      }
+
+      .brand-logo,
+      .success-mark,
+      .eyebrow,
+      h1,
+      .lead,
+      .next-steps li,
+      .actions,
+      .fine-print {
+        opacity: 1;
+        animation: none;
+      }
+
+      .success-ring,
+      .success-check {
+        animation-duration: 1ms;
+        animation-delay: 0ms;
+      }
+    }
+
+    h1 {
+      max-width: 660px;
+      margin: 0 auto 18px;
+      color: var(--white);
+      font-size: 56px;
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-wrap: balance;
+      opacity: 0;
+      animation: enterUp 560ms ease 1980ms forwards;
+    }
+
+    .lead {
+      max-width: 560px;
+      margin: 0 auto 42px;
+      color: var(--night-muted);
+      font-size: 18px;
+      line-height: 1.55;
+      text-wrap: balance;
+      opacity: 0;
+      animation: enterUp 560ms ease 2080ms forwards;
+    }
+
+    .next-steps {
+      width: min(620px, 100%);
+      display: grid;
+      gap: 12px;
+      margin: 0 auto 34px;
+      padding: 0;
+      list-style: none;
+      text-align: left;
+    }
+
+    .next-steps li {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 14px;
+      align-items: start;
+      padding: 18px;
+      background: rgba(255, 255, 255, 0.055);
+      border: 1px solid var(--night-line);
+      border-radius: var(--radius-lg);
+      opacity: 0;
+      animation: enterUp 520ms ease forwards;
+    }
+
+    .next-steps li:nth-child(1) {
+      animation-delay: 2200ms;
+    }
+
+    .next-steps li:nth-child(2) {
+      animation-delay: 2300ms;
+    }
+
+    .next-steps li:nth-child(3) {
+      animation-delay: 2400ms;
+    }
+
+    .next-steps .step-index {
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--red);
+      background: rgba(237, 28, 36, 0.10);
+      border: 1px solid rgba(237, 28, 36, 0.34);
+      border-radius: 8px;
+      font-family: var(--font-space-mono);
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1;
+      align-self: center;
+      text-align: center;
+    }
+
+    .next-steps strong {
+      display: block;
+      margin: 1px 0 4px;
+      color: var(--white);
+      font-size: 17px;
+      line-height: 1.25;
+      font-weight: 800;
+    }
+
+    .next-steps span {
+      display: block;
+      color: var(--night-muted);
+      font-size: 15px;
+      line-height: 1.5;
+      text-wrap: pretty;
+    }
+
+    .actions {
+      display: grid;
+      justify-content: center;
+      justify-items: center;
+      gap: 12px;
+      margin: 0 0 24px;
+      opacity: 0;
+      animation: enterUp 520ms ease 2520ms forwards;
+    }
+
+    .action-copy {
+      max-width: 560px;
+      margin: 0 0 4px;
+      color: rgba(255, 255, 255, 0.68);
+      font-size: 15px;
+      line-height: 1.55;
+      text-wrap: balance;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-whatsapp,
+    .btn-secondary {
+      min-height: 50px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 0 22px;
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--night-line);
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 700;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .btn-whatsapp {
+      color: #05140a;
+      background: var(--whatsapp);
+      border-color: var(--whatsapp);
+      box-shadow: 0 16px 32px rgba(37, 211, 102, 0.18);
+    }
+
+    .btn-whatsapp:hover {
+      transform: translateY(-1px);
+      background: var(--whatsapp-dark);
+      border-color: var(--whatsapp-dark);
+    }
+
+    .whatsapp-icon {
+      width: 20px;
+      height: 20px;
+      flex: 0 0 auto;
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-1px);
+      border-color: var(--red);
+      background: rgba(255, 255, 255, 0.10);
+    }
+
+    .fine-print {
+      max-width: 620px;
+      margin: 0 auto;
+      color: rgba(255, 255, 255, 0.46);
+      font-size: 12px;
+      line-height: 1.55;
+      text-wrap: balance;
+      opacity: 0;
+      animation: enterUp 520ms ease 2630ms forwards;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 24px 22px;
+      }
+
+      .wrap {
+        gap: 42px;
+      }
+
+      .brand-logo {
+        width: 86px;
+      }
+
+      .hero {
+        padding-top: 26px;
+      }
+
+      .success-mark {
+        width: 48px;
+        height: 48px;
+      }
+
+      h1 {
+        font-size: 38px;
+      }
+
+      .lead {
+        margin-bottom: 32px;
+        font-size: 16px;
+      }
+
+      .next-steps li {
+        grid-template-columns: 36px 1fr;
+        padding: 16px;
+      }
+
+      .next-steps strong {
+        font-size: 16px;
+      }
+
+      .next-steps span {
+        font-size: 14px;
+      }
+
+      .actions,
+      .action-buttons,
+      .btn-whatsapp,
+      .btn-secondary {
+        width: 100%;
+      }
+
+      .action-copy {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="success-splash" aria-hidden="true">
+    <div class="splash-mark">
+      <svg viewBox="0 0 56 56" width="156" height="156">
+        <circle class="splash-ring" cx="28" cy="28" r="24"></circle>
+        <path class="splash-check" d="M17 29.5 24.3 36.5 39.5 20"></path>
+      </svg>
+    </div>
+  </div>
+
+  <main class="wrap" aria-label="Diagnóstico recebido">
+    <img class="brand-logo" src="assets/logo-ademicon-form.png" alt="Ademicon crédito">
+
+    <section class="hero">
+      <div class="success-mark" aria-hidden="true">
+        <svg viewBox="0 0 56 56" width="56" height="56">
+          <circle class="success-ring" cx="28" cy="28" r="24"></circle>
+          <path class="success-check" d="M17 29.5 24.3 36.5 39.5 20"></path>
+        </svg>
+      </div>
+      <p class="eyebrow">Diagnóstico recebido</p>
+      <h1>Suas respostas chegaram até nós.</h1>
+      <p class="lead">Obrigado por dedicar alguns minutos ao seu diagnóstico patrimonial. A partir daqui, a conversa fica mais objetiva.</p>
+
+      <ol class="next-steps">
+        <li>
+          <span class="step-index">01</span>
+          <div>
+            <strong>Análise das respostas</strong>
+            <span>Um especialista revisa seu objetivo, prazo e capacidade mensal.</span>
+          </div>
+        </li>
+        <li>
+          <span class="step-index">02</span>
+          <div>
+            <strong>Contato pelo WhatsApp</strong>
+            <span>Falamos com você no número informado para entender melhor o seu momento.</span>
+          </div>
+        </li>
+        <li>
+          <span class="step-index">03</span>
+          <div>
+            <strong>Conversa sobre possibilidades</strong>
+            <span>Sem pressão e sem decisão no impulso. Só clareza sobre os próximos passos.</span>
+          </div>
+        </li>
+      </ol>
+
+      <div class="actions">
+        <p class="action-copy">Se quiser acelerar seu atendimento, chame nossa equipe no WhatsApp e avise que você já preencheu o diagnóstico.</p>
+        <div class="action-buttons">
+          <a class="btn-whatsapp" href="https://wa.me/554198538078?text=Ol%C3%A1%2C%20preenchi%20o%20diagn%C3%B3stico%20patrimonial%20da%20Ademicon%20e%20quero%20adiantar%20meu%20atendimento." target="_blank" rel="noopener" aria-label="Chamar a Ademicon no WhatsApp">
+            <svg class="whatsapp-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="currentColor" d="M12.04 2C6.59 2 2.16 6.42 2.16 11.86c0 1.74.46 3.43 1.33 4.92L2 22l5.35-1.4a9.87 9.87 0 0 0 4.69 1.19h.01c5.44 0 9.87-4.42 9.87-9.86C21.92 6.45 17.49 2 12.04 2Zm0 18.08h-.01a8.2 8.2 0 0 1-4.18-1.14l-.3-.18-3.18.83.85-3.09-.2-.32a8.14 8.14 0 0 1-1.25-4.32 8.27 8.27 0 0 1 8.27-8.24 8.27 8.27 0 0 1 8.27 8.31 8.26 8.26 0 0 1-8.27 8.15Zm4.53-6.18c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.96-.14.17-.29.18-.54.06-.25-.13-1.05-.39-2-1.24-.74-.66-1.24-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.76-1.84-.2-.48-.4-.41-.56-.42h-.47c-.17 0-.43.06-.66.31-.22.25-.86.84-.86 2.04 0 1.2.88 2.37 1 2.53.12.17 1.72 2.63 4.18 3.69.58.25 1.04.4 1.39.51.59.19 1.12.16 1.54.1.47-.07 1.47-.6 1.67-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.16-.48-.28Z"></path>
+            </svg>
+            Chamar no WhatsApp
+          </a>
+          <a class="btn-secondary" href="index.html">Voltar para o início</a>
+        </div>
+      </div>
+
+      <p class="fine-print">A análise não promete contemplação, rentabilidade ou aprovação. Ela serve para entender possibilidades conforme perfil, prazo e capacidade mensal.</p>
+    </section>
+  </main>
+</body>
+</html>

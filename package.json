@@ -1,0 +1,17 @@
+{
+  "name": "ademicon-diagnostico-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Landing page e formulario de diagnostico patrimonial da Ademicon.",
+  "scripts": {
+    "check": "node scripts/check-static-site.mjs",
+    "start": "node scripts/serve-static.mjs"
+  },
+  "keywords": [
+    "ademicon",
+    "diagnostico",
+    "landing-page",
+    "static-site"
+  ],
+  "license": "UNLICENSED"
+}

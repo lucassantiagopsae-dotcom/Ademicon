@@ -1,0 +1,58 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/apresentacao-diagnostico-patrimonial",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/apresentacao-diagnostico-patrimonial.html",
+      "destination": "/",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/diagnostico",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/formulario",
+      "destination": "/formulario-ademicon-typeform.html"
+    },
+    {
+      "source": "/obrigado",
+      "destination": "/obrigado.html"
+    },
+    {
+      "source": "/links",
+      "destination": "/links-bianca-chechelaki.html"
+    },
+    {
+      "source": "/depoimentos",
+      "destination": "/depoimentos-ademicon.html"
+    }
+  ]
+}

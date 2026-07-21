@@ -1,0 +1,1733 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Diagnóstico Patrimonial | Ademicon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Cores — marca (herói + família) */
+      --red: #ED1C24;
+      --red-bright: #FF1726;
+      --red-deep: #B70915;
+      --wine: #7E0810;
+
+      /* Cores — neutros */
+      --black: #1E1E1E;
+      --ink: #111111;
+      --text: #414042;
+      --muted: #939598;
+      --line: #DCDDDE;
+      --line-strong: #D7D3D0;
+      --soft: #F3F2F0;
+      --white: #ffffff;
+      --night: #070707;
+      --night-soft: #101010;
+      --night-line: rgba(255, 255, 255, 0.16);
+      --night-muted: rgba(255, 255, 255, 0.66);
+
+      /* Tipografia */
+      --font-archivo: 'Archivo', 'Poppins', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      --font-space-mono: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+      /* Raio */
+      --radius-sm: 8px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-pill: 999px;
+
+      /* Elevação */
+      --shadow: 0 22px 60px rgba(30, 30, 30, 0.14);
+      --shadow-md: 0 12px 28px rgba(30, 30, 30, 0.10);
+      --shadow-red: 0 12px 24px rgba(237, 28, 36, 0.28);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--night);
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 24px;
+      color: var(--white);
+      font-family: var(--font-archivo);
+      letter-spacing: 0;
+      background:
+        radial-gradient(900px 520px at 50% 0%, rgba(237, 28, 36, 0.18), rgba(7, 7, 7, 0) 62%),
+        linear-gradient(180deg, #050505 0%, #0b0b0b 58%, #050505 100%);
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 760px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .brand-logo {
+      display: block;
+      width: 128px;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .card {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .top-bar {
+      display: none;
+    }
+
+    .progress-wrap {
+      display: grid;
+      gap: 9px;
+      justify-items: center;
+    }
+
+    .progress {
+      display: grid;
+      grid-template-columns: repeat(6, 22px);
+      gap: 6px;
+      width: max-content;
+      min-height: 8px;
+      align-items: center;
+    }
+
+    .progress-segment {
+      width: 22px;
+      height: 4px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 255, 255, 0.20);
+      transition: background 220ms ease, transform 220ms ease;
+    }
+
+    .progress-segment.is-complete,
+    .progress-segment.is-active {
+      background: var(--red);
+    }
+
+    .progress-segment.is-active {
+      transform: scaleX(1.18);
+    }
+
+    .stage {
+      position: relative;
+    }
+
+    .panel {
+      display: none;
+      align-content: center;
+      min-height: 500px;
+      padding: 64px 24px 46px;
+      text-align: center;
+    }
+
+    .panel.is-active {
+      display: grid;
+      position: relative;
+      animation: panelIn 440ms ease both;
+    }
+
+    .panel.is-leaving {
+      display: grid;
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      animation: panelOut 440ms ease both;
+    }
+
+    @keyframes panelIn {
+      from { opacity: 0; transform: translateY(26px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes panelOut {
+      from { opacity: 1; transform: translateY(0); }
+      to { opacity: 0; transform: translateY(-26px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .panel.is-active,
+      .panel.is-leaving {
+        animation-duration: 1ms;
+      }
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      justify-self: center;
+      margin: 0 0 24px;
+      color: var(--night-muted);
+      font-family: var(--font-space-mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 34px;
+      height: 1px;
+      background: var(--red);
+    }
+
+    .intro-title {
+      margin: 0 0 18px;
+      color: var(--white);
+      font-size: 58px;
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-wrap: balance;
+    }
+
+    .lead {
+      margin: 0 auto 34px;
+      max-width: 560px;
+      color: var(--night-muted);
+      font-size: 18px;
+      line-height: 1.55;
+      text-wrap: balance;
+    }
+
+    .step-number {
+      margin: 0 0 14px;
+      color: var(--red);
+      font-family: var(--font-space-mono);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .question {
+      margin: 0 auto 16px;
+      max-width: 620px;
+      color: var(--white);
+      font-size: 42px;
+      line-height: 1.08;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-wrap: balance;
+    }
+
+    .hint {
+      margin: 0 auto 32px;
+      max-width: 520px;
+      color: var(--night-muted);
+      font-size: 16px;
+      line-height: 1.55;
+      text-wrap: balance;
+    }
+
+    .field {
+      width: 100%;
+      max-width: 520px;
+      height: 64px;
+      margin: 0 auto;
+      padding: 0 22px;
+      color: var(--white);
+      text-align: center;
+      background: rgba(255, 255, 255, 0.055);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      outline: none;
+      font-size: 24px;
+      font-weight: 600;
+      transition: background 180ms ease, border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+    }
+
+    .field::placeholder {
+      color: rgba(255, 255, 255, 0.42);
+    }
+
+    .field:hover {
+      background: rgba(255, 255, 255, 0.075);
+      border-color: rgba(255, 255, 255, 0.28);
+    }
+
+    .field:focus {
+      background: rgba(255, 255, 255, 0.075);
+      border-color: var(--red);
+      box-shadow:
+        0 0 0 3px rgba(237, 28, 36, 0.16),
+        0 14px 30px rgba(237, 28, 36, 0.10);
+    }
+
+    .phone-field {
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .phone-combo {
+      position: relative;
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .country-control {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      z-index: 3;
+      width: 58px;
+      height: 42px;
+      transform: translateY(-50%);
+    }
+
+    .country-trigger {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      display: block;
+      padding: 0;
+      color: inherit;
+      background: transparent;
+      border: 0;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .country-trigger:focus-visible {
+      outline: 2px solid var(--red);
+      outline-offset: 4px;
+    }
+
+    .country-flag {
+      position: absolute;
+      left: 4px;
+      top: 50%;
+      width: 24px;
+      height: 18px;
+      object-fit: cover;
+      border-radius: 3px;
+      transform: translateY(-50%);
+      pointer-events: none;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18);
+      z-index: 2;
+    }
+
+    .country-control::after {
+      content: "";
+      position: absolute;
+      left: 36px;
+      top: 50%;
+      width: 7px;
+      height: 7px;
+      border-right: 2px solid rgba(255, 255, 255, 0.72);
+      border-bottom: 2px solid rgba(255, 255, 255, 0.72);
+      transform: translateY(-70%) rotate(45deg);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .country-control::before {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 8px;
+      bottom: 8px;
+      width: 1px;
+      background: rgba(255, 255, 255, 0.16);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .country-control.is-other .country-flag {
+      display: none;
+    }
+
+    .country-control.is-other::before {
+      content: "+";
+      position: absolute;
+      left: 8px;
+      top: 50%;
+      bottom: auto;
+      width: auto;
+      background: transparent;
+      color: var(--white);
+      font-size: 20px;
+      font-weight: 800;
+      transform: translateY(-50%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .country-select {
+      display: none;
+    }
+
+    .phone-combo .field {
+      max-width: none;
+      padding-left: 86px;
+    }
+
+    .phone-combo:hover .field {
+      background: rgba(255, 255, 255, 0.075);
+      border-color: rgba(255, 255, 255, 0.28);
+    }
+
+    .phone-combo:focus-within .field {
+      background: rgba(255, 255, 255, 0.075);
+      border-color: var(--red);
+      box-shadow:
+        0 0 0 3px rgba(237, 28, 36, 0.16),
+        0 14px 30px rgba(237, 28, 36, 0.10);
+    }
+
+    .country-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: grid;
+      place-items: center;
+      padding: 22px;
+      background: rgba(0, 0, 0, 0.64);
+      backdrop-filter: blur(14px);
+    }
+
+    .country-modal[hidden] {
+      display: none;
+    }
+
+    .country-sheet {
+      width: min(430px, 100%);
+      max-height: min(620px, calc(100svh - 44px));
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      overflow: hidden;
+      color: var(--white);
+      background:
+        linear-gradient(180deg, rgba(237, 28, 36, 0.10), transparent 42%),
+        #111111;
+      border: 1px solid var(--night-line);
+      border-radius: 10px;
+      box-shadow:
+        0 24px 70px rgba(0, 0, 0, 0.58),
+        0 0 0 1px rgba(237, 28, 36, 0.12);
+      animation: countryIn 180ms ease both;
+    }
+
+    @keyframes countryIn {
+      from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.98);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .country-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 18px 12px;
+    }
+
+    .country-title {
+      display: grid;
+      gap: 4px;
+    }
+
+    .country-title strong {
+      font-size: 17px;
+      line-height: 1.2;
+    }
+
+    .country-title span {
+      color: var(--night-muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .country-close {
+      width: 38px;
+      height: 38px;
+      display: inline-grid;
+      place-items: center;
+      flex: 0 0 auto;
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--night-line);
+      border-radius: 8px;
+      cursor: pointer;
+      font: inherit;
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .country-close:hover {
+      border-color: var(--red);
+      background: rgba(255, 255, 255, 0.11);
+    }
+
+    .country-search-wrap {
+      padding: 0 18px 14px;
+    }
+
+    .country-search {
+      width: 100%;
+      height: 46px;
+      padding: 0 14px;
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--night-line);
+      border-radius: 8px;
+      outline: none;
+      font: inherit;
+      font-size: 15px;
+    }
+
+    .country-search::placeholder {
+      color: rgba(255, 255, 255, 0.38);
+    }
+
+    .country-search:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(237, 28, 36, 0.14);
+    }
+
+    .country-list {
+      display: grid;
+      gap: 6px;
+      min-height: 0;
+      max-height: 430px;
+      overflow: auto;
+      padding: 0 10px 10px;
+      scrollbar-color: rgba(237, 28, 36, 0.7) rgba(255, 255, 255, 0.08);
+    }
+
+    .country-option {
+      min-height: 54px;
+      display: grid;
+      grid-template-columns: 34px 1fr auto;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 12px;
+      color: var(--white);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: left;
+      font: inherit;
+    }
+
+    .country-option:hover,
+    .country-option.is-active {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: var(--night-line);
+    }
+
+    .country-option.is-selected {
+      background: rgba(237, 28, 36, 0.12);
+      border-color: rgba(237, 28, 36, 0.46);
+    }
+
+    .country-option-flag {
+      width: 28px;
+      height: 20px;
+      object-fit: cover;
+      border-radius: 4px;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18);
+    }
+
+    .country-option-other {
+      width: 28px;
+      height: 28px;
+      display: inline-grid;
+      place-items: center;
+      color: var(--white);
+      background: rgba(237, 28, 36, 0.20);
+      border: 1px solid rgba(237, 28, 36, 0.42);
+      border-radius: 6px;
+      font-weight: 800;
+    }
+
+    .country-option-name {
+      display: grid;
+      gap: 3px;
+    }
+
+    .country-option-name strong {
+      font-size: 15px;
+      line-height: 1.1;
+    }
+
+    .country-option-name span {
+      color: var(--night-muted);
+      font-size: 12px;
+      line-height: 1.2;
+    }
+
+    .country-option-code {
+      color: rgba(255, 255, 255, 0.6);
+      font-family: var(--font-space-mono);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .optional-contact {
+      width: 100%;
+      max-width: 520px;
+      margin: 18px auto 0;
+      padding-top: 18px;
+      border-top: 1px solid var(--night-line);
+    }
+
+    .optional-contact[hidden] {
+      display: none;
+    }
+
+    .optional-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 0 0 12px;
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .optional-label span {
+      color: var(--night-muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .add-phone-btn,
+    .remove-phone-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      margin: 18px auto 0;
+      padding: 0 18px;
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--night-line);
+      border-radius: 8px;
+      cursor: pointer;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+    }
+
+    .add-phone-btn:hover,
+    .remove-phone-btn:hover {
+      border-color: var(--red);
+      background: rgba(255, 255, 255, 0.10);
+      transform: translateY(-1px);
+    }
+
+    .add-phone-btn[hidden] {
+      display: none;
+    }
+
+    .optional-actions {
+      display: flex;
+      justify-content: center;
+    }
+
+    .remove-phone-btn {
+      min-height: auto;
+      margin-top: 14px;
+      padding: 0;
+      color: var(--night-muted);
+      background: transparent;
+      border: 0;
+    }
+
+    .options {
+      display: grid;
+      gap: 12px;
+      max-width: 560px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .option {
+      position: relative;
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 12px;
+      align-items: center;
+      min-height: 60px;
+      padding: 12px 18px;
+      text-align: left;
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.055);
+      border: 1px solid var(--night-line);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color 180ms ease, transform 180ms ease, background 180ms ease;
+    }
+
+    .option:hover {
+      border-color: var(--red);
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.09);
+    }
+
+    .option input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .key {
+      width: 32px;
+      height: 32px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 6px;
+      color: var(--red);
+      background: rgba(237, 28, 36, 0.10);
+      border: 1px solid rgba(237, 28, 36, 0.24);
+      font-family: var(--font-space-mono);
+      font-weight: 700;
+    }
+
+    .option span:last-child {
+      overflow-wrap: anywhere;
+      font-size: 16px;
+      line-height: 1.35;
+      font-weight: 600;
+    }
+
+    .option:has(input:checked) {
+      border-color: var(--red);
+      background: rgba(237, 28, 36, 0.13);
+    }
+
+    .option:has(input:checked) .key {
+      color: var(--white);
+      background: var(--red);
+    }
+
+    .error {
+      min-height: 22px;
+      margin-top: 18px;
+      color: #ff6a72;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .btn {
+      min-height: 48px;
+      border: 0;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      font-family: var(--font-archivo);
+      font-weight: 700;
+      letter-spacing: 0;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      padding: 0 30px;
+      color: var(--white);
+      background: var(--red);
+      box-shadow: none;
+    }
+
+    .btn-primary:hover {
+      background: var(--red-bright);
+    }
+
+    .btn-secondary {
+      width: 48px;
+      border-radius: var(--radius-md);
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--night-line);
+    }
+
+    .btn-secondary:disabled,
+    .btn-primary:disabled {
+      cursor: not-allowed;
+      opacity: 0.48;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .intro-cta {
+      justify-self: center;
+      margin-top: 24px;
+    }
+
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 76px;
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 0 0 20px;
+      border-top: 0;
+      background: transparent;
+    }
+
+    .footer[hidden] {
+      display: none;
+    }
+
+    .counter {
+      color: var(--night-muted);
+      font-family: var(--font-space-mono);
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+    }
+
+    .nav {
+      display: flex;
+      gap: 10px;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 18px;
+      }
+
+      .brand-logo {
+        width: 112px;
+      }
+
+      .panel {
+        min-height: 450px;
+        padding: 42px 4px 34px;
+      }
+
+      .intro-title {
+        font-size: 38px;
+      }
+
+      .lead {
+        font-size: 16px;
+      }
+
+      .question {
+        font-size: 30px;
+      }
+
+      .field {
+        height: 58px;
+        font-size: 20px;
+      }
+
+      .phone-combo .field {
+        padding-left: 78px;
+      }
+
+      .country-control {
+        left: 10px;
+        width: 54px;
+        height: 38px;
+      }
+
+      .country-flag {
+        width: 22px;
+        height: 16px;
+      }
+
+      .country-control::after {
+        left: 32px;
+      }
+
+      .country-modal {
+        align-items: end;
+        padding: 16px;
+      }
+
+      .country-sheet {
+        max-height: min(680px, calc(100svh - 32px));
+        border-radius: 12px 12px 10px 10px;
+      }
+
+      .country-list {
+        max-height: min(460px, calc(100svh - 210px));
+      }
+
+      .footer {
+        display: grid;
+        justify-items: center;
+        gap: 18px;
+        padding: 0 0 18px;
+      }
+
+      .nav {
+        justify-content: center;
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .panel {
+        min-height: 420px;
+        padding: 32px 0 28px;
+      }
+
+      .intro-title {
+        font-size: 32px;
+      }
+
+      .question {
+        font-size: 26px;
+      }
+
+      .option {
+        min-height: 54px;
+        padding: 10px 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <img class="brand-logo" src="assets/logo-ademicon-form.png" alt="Ademicon crédito">
+
+    <section class="card" aria-label="Diagnóstico patrimonial">
+      <div class="top-bar"></div>
+
+      <form id="leadForm" novalidate>
+        <div class="stage" id="stage">
+          <!-- Intro -->
+          <section class="panel is-active" data-intro>
+            <p class="eyebrow">Diagnóstico patrimonial</p>
+            <h1 class="intro-title">Seu esforço fora do Brasil precisa virar patrimônio.</h1>
+            <p class="lead">Comece pelo seu nome. Depois, responda algumas perguntas para prepararmos uma conversa clara sobre seu plano no Brasil.</p>
+            <input class="field" type="text" name="nome" autocomplete="name" required placeholder="Digite seu nome">
+            <p class="error" aria-live="polite"></p>
+            <button type="button" class="btn btn-primary intro-cta" id="startBtn">Começar</button>
+          </section>
+
+          <!-- 01 -->
+          <section class="panel" data-step>
+            <p class="step-number">01</p>
+            <h2 class="question">Qual é o seu e-mail?</h2>
+            <p class="hint">Vamos usar apenas para contato sobre sua análise.</p>
+            <input class="field" type="email" name="email" autocomplete="email" required placeholder="seuemail@exemplo.com">
+            <p class="error" aria-live="polite"></p>
+          </section>
+
+          <!-- 02 -->
+          <section class="panel" data-step>
+            <p class="step-number">02</p>
+            <h2 class="question">Qual seu WhatsApp?</h2>
+            <p class="hint">Escolha o país e digite seu número. A máscara se ajusta automaticamente.</p>
+            <div class="phone-combo" data-phone-combo data-default-country="BR">
+              <div class="country-control">
+                <img class="country-flag" alt="" data-country-flag>
+                <button class="country-trigger" type="button" aria-label="Selecionar país do WhatsApp" aria-haspopup="dialog" aria-expanded="false" data-country-trigger></button>
+                <select class="country-select" name="whatsapp_pais" aria-label="País do WhatsApp" data-country-select></select>
+              </div>
+              <input class="field phone-input" type="tel" name="whatsapp" autocomplete="tel" inputmode="tel" required placeholder="11 99999 9999" maxlength="22">
+            </div>
+            <button class="add-phone-btn" type="button" id="addPhoneBtn">+ Adicionar outro número</button>
+            <div class="optional-contact" id="optionalPhone" hidden>
+              <p class="optional-label">Outro número de contato <span>opcional</span></p>
+              <div class="phone-combo" data-phone-combo data-default-country="BR">
+                <div class="country-control">
+                  <img class="country-flag" alt="" data-country-flag>
+                  <button class="country-trigger" type="button" aria-label="Selecionar país do número extra" aria-haspopup="dialog" aria-expanded="false" data-country-trigger></button>
+                  <select class="country-select" name="whatsapp_secundario_pais" aria-label="País do número extra" data-country-select></select>
+                </div>
+                <input class="field phone-input" id="secondaryPhone" type="tel" name="whatsapp_secundario" autocomplete="tel" inputmode="tel" placeholder="44 98829 9430" maxlength="22">
+              </div>
+              <div class="optional-actions">
+                <button class="remove-phone-btn" type="button" id="removePhoneBtn">Remover número extra</button>
+              </div>
+            </div>
+            <p class="error" aria-live="polite"></p>
+          </section>
+
+          <!-- 03 -->
+          <section class="panel" data-step>
+            <p class="step-number">03</p>
+            <h2 class="question">Em qual país você mora atualmente?</h2>
+            <p class="hint">Ajuda a ajustar moeda, fuso e horário de contato.</p>
+            <div class="options" role="radiogroup" aria-label="País onde mora atualmente">
+              <label class="option">
+                <input type="radio" name="pais" value="Portugal" required>
+                <span class="key">A</span>
+                <span>Portugal</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="pais" value="Bélgica" required>
+                <span class="key">B</span>
+                <span>Bélgica</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="pais" value="França" required>
+                <span class="key">C</span>
+                <span>França</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="pais" value="Espanha" required>
+                <span class="key">D</span>
+                <span>Espanha</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="pais" value="Itália" required>
+                <span class="key">E</span>
+                <span>Itália</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="pais" value="Alemanha" required>
+                <span class="key">F</span>
+                <span>Alemanha</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="pais" value="Reino Unido" required>
+                <span class="key">G</span>
+                <span>Reino Unido</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="pais" value="Outro" required>
+                <span class="key">H</span>
+                <span>Outro</span>
+              </label>
+            </div>
+            <p class="error" aria-live="polite"></p>
+          </section>
+
+          <!-- 04 -->
+          <section class="panel" data-step>
+            <p class="step-number">04</p>
+            <h2 class="question">Qual é o seu objetivo no Brasil?</h2>
+            <p class="hint">Escolha a opção que mais se aproxima do seu momento.</p>
+            <div class="options" role="radiogroup" aria-label="Objetivo">
+              <label class="option">
+                <input type="radio" name="objetivo" value="Comprar para morar quando voltar" required>
+                <span class="key">A</span>
+                <span>Comprar para morar quando voltar</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="objetivo" value="Comprar para investir / renda de aluguel" required>
+                <span class="key">B</span>
+                <span>Comprar para investir / renda de aluguel</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="objetivo" value="Comprar para a família usar" required>
+                <span class="key">C</span>
+                <span>Comprar para a família usar</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="objetivo" value="Ainda estou estudando a possibilidade" required>
+                <span class="key">D</span>
+                <span>Ainda estou estudando a possibilidade</span>
+              </label>
+            </div>
+            <p class="error" aria-live="polite"></p>
+          </section>
+
+          <!-- 05 -->
+          <section class="panel" data-step>
+            <p class="step-number">05</p>
+            <h2 class="question">Quanto você consegue investir por mês?</h2>
+            <p class="hint">Essa faixa ajuda a preparar uma simulação mais realista.</p>
+            <div class="options" role="radiogroup" aria-label="Investimento mensal">
+              <label class="option">
+                <input type="radio" name="investimento_mensal" value="Até R$ 1.000 / mês" required>
+                <span class="key">A</span>
+                <span>Até R$ 1.000 / mês</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="investimento_mensal" value="R$ 1.000 a R$ 2.500 / mês" required>
+                <span class="key">B</span>
+                <span>R$ 1.000 a R$ 2.500 / mês</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="investimento_mensal" value="R$ 2.500 a R$ 5.000 / mês" required>
+                <span class="key">C</span>
+                <span>R$ 2.500 a R$ 5.000 / mês</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="investimento_mensal" value="Acima de R$ 5.000 / mês" required>
+                <span class="key">D</span>
+                <span>Acima de R$ 5.000 / mês</span>
+              </label>
+            </div>
+            <p class="error" aria-live="polite"></p>
+          </section>
+
+          <!-- 06 -->
+          <section class="panel" data-step>
+            <p class="step-number">06</p>
+            <h2 class="question">Quando você pretende dar esse passo?</h2>
+            <p class="hint">Entenda seu prazo sem precisar decidir agora.</p>
+            <div class="options" role="radiogroup" aria-label="Prazo">
+              <label class="option">
+                <input type="radio" name="prazo" value="O quanto antes (próximos 30 dias)" required>
+                <span class="key">A</span>
+                <span>O quanto antes (próximos 30 dias)</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="prazo" value="Nos próximos 3 a 6 meses" required>
+                <span class="key">B</span>
+                <span>Nos próximos 3 a 6 meses</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="prazo" value="Ainda este ano" required>
+                <span class="key">C</span>
+                <span>Ainda este ano</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="prazo" value="Sem data definida / só pesquisando" required>
+                <span class="key">D</span>
+                <span>Sem data definida / só pesquisando</span>
+              </label>
+            </div>
+            <p class="error" aria-live="polite"></p>
+          </section>
+        </div>
+
+        <div class="footer" id="footer" hidden>
+          <div class="progress-wrap" aria-label="Progresso do formulário">
+            <p class="counter" id="counter">Pergunta 1 de 6</p>
+            <div class="progress" id="progress" aria-hidden="true"></div>
+          </div>
+          <div class="nav">
+            <button class="btn btn-secondary" type="button" id="prevBtn" aria-label="Voltar">←</button>
+            <button class="btn btn-primary" type="button" id="nextBtn">Continuar</button>
+            <button class="btn btn-primary" type="submit" id="submitBtn" hidden>Enviar respostas</button>
+          </div>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <div class="country-modal" id="countryModal" hidden>
+    <div class="country-sheet" role="dialog" aria-modal="true" aria-labelledby="countryModalTitle">
+      <div class="country-head">
+        <div class="country-title">
+          <strong id="countryModalTitle">Escolha o país</strong>
+          <span>Principais países primeiro. A máscara muda automaticamente.</span>
+        </div>
+        <button class="country-close" type="button" aria-label="Fechar seletor de país" data-country-close>×</button>
+      </div>
+      <div class="country-search-wrap">
+        <input class="country-search" type="search" placeholder="Buscar país ou DDI" autocomplete="off" data-country-search>
+      </div>
+      <div class="country-list" role="listbox" data-country-list></div>
+    </div>
+  </div>
+
+  <script>
+    /* ------------------------------------------------------------------ *
+     * Integração com banco de dados (salvamento progressivo)
+     *
+     * Ainda não há backend. A estrutura abaixo já monta o payload e chama
+     * persist() a cada etapa concluída (parcial) e no envio final (completo),
+     * independentemente de o lead terminar o fluxo.
+     *
+     * Para plugar um banco (ex.: Firebase/Firestore, Supabase, webhook n8n),
+     * basta preencher SAVE_ENDPOINT com a URL que faz o "upsert" por lead_id.
+     * ------------------------------------------------------------------ */
+    const SAVE_ENDPOINT = ""; // <-- URL do backend/banco (upsert por lead_id)
+    const THANK_YOU_URL = "obrigado.html";
+    const STORAGE_KEY = "ademicon_diagnostico";
+
+    const leadId = (window.crypto && crypto.randomUUID)
+      ? crypto.randomUUID()
+      : "lead_" + Date.now() + "_" + Math.random().toString(16).slice(2);
+
+    const answers = {
+      lead_id: leadId,
+      origem: "Form 27/06 - HTML Ademicon",
+      criado_em: new Date().toISOString()
+    };
+
+    function persist(evento) {
+      answers.atualizado_em = new Date().toISOString();
+
+      // Persistência local (o lead não se perde no navegador mesmo sem backend)
+      try {
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(answers));
+      } catch (e) { /* storage indisponível */ }
+
+      // Persistência no banco — só dispara quando SAVE_ENDPOINT estiver configurado
+      if (SAVE_ENDPOINT) {
+        fetch(SAVE_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...answers, evento }),
+          keepalive: true
+        }).catch(() => { /* falha silenciosa: não travar o fluxo do lead */ });
+      }
+    }
+
+    /* ------------------------------------------------------------------ */
+
+    const form = document.querySelector("#leadForm");
+    const stage = document.querySelector("#stage");
+    const panels = [...stage.querySelectorAll(".panel")];
+    const steps = [...stage.querySelectorAll("[data-step]")];
+    const progress = document.querySelector("#progress");
+    const counter = document.querySelector("#counter");
+    const footer = document.querySelector("#footer");
+    const startBtn = document.querySelector("#startBtn");
+    const prevBtn = document.querySelector("#prevBtn");
+    const nextBtn = document.querySelector("#nextBtn");
+    const submitBtn = document.querySelector("#submitBtn");
+    const addPhoneBtn = document.querySelector("#addPhoneBtn");
+    const optionalPhone = document.querySelector("#optionalPhone");
+    const secondaryPhone = document.querySelector("#secondaryPhone");
+    const removePhoneBtn = document.querySelector("#removePhoneBtn");
+
+    progress.style.gridTemplateColumns = `repeat(${steps.length}, 22px)`;
+    progress.innerHTML = steps.map((_, index) => `<span class="progress-segment" data-progress-index="${index}"></span>`).join("");
+    const progressSegments = [...progress.querySelectorAll(".progress-segment")];
+
+    let current = 0;   // índice em panels (0 = intro)
+    let animating = false;
+
+    function updateChrome() {
+      const isIntro = panels[current].hasAttribute("data-intro");
+      footer.hidden = isIntro;
+
+      if (isIntro) {
+        progressSegments.forEach((segment) => {
+          segment.classList.remove("is-complete", "is-active");
+        });
+        return;
+      }
+
+      const stepIndex = steps.indexOf(panels[current]); // 0..6
+      counter.textContent = `Pergunta ${stepIndex + 1} de ${steps.length}`;
+      progressSegments.forEach((segment, index) => {
+        segment.classList.toggle("is-complete", index < stepIndex);
+        segment.classList.toggle("is-active", index === stepIndex);
+      });
+
+      const isLast = stepIndex === steps.length - 1;
+      nextBtn.hidden = isLast;
+      submitBtn.hidden = !isLast;
+    }
+
+    function focusCurrent() {
+      const field = panels[current].querySelector("input:not([type='radio'])");
+      if (field) field.focus();
+    }
+
+    function goTo(index) {
+      if (animating || index < 0 || index >= panels.length || index === current) {
+        return;
+      }
+
+      animating = true;
+      const leaving = panels[current];
+      const entering = panels[index];
+
+      leaving.classList.remove("is-active");
+      leaving.classList.add("is-leaving");
+      entering.classList.add("is-active");
+
+      window.setTimeout(() => {
+        leaving.classList.remove("is-leaving");
+        animating = false;
+      }, 440);
+
+      current = index;
+      updateChrome();
+      window.setTimeout(focusCurrent, 120);
+    }
+
+    /* ---------------- Telefone internacional ---------------- */
+
+    const PHONE_COUNTRIES = [
+      { iso: "BR", name: "Brasil", code: "55", mask: [2, 5, 4], min: 10, max: 11, placeholder: "11 99999 9999", priority: true },
+      { iso: "PT", name: "Portugal", code: "351", mask: [3, 3, 3], min: 9, max: 9, placeholder: "912 345 678", priority: true },
+      { iso: "BE", name: "Bélgica", code: "32", mask: [3, 2, 2, 2], min: 8, max: 9, placeholder: "471 12 34 56", priority: true },
+      { iso: "FR", name: "França", code: "33", mask: [1, 2, 2, 2, 2], min: 9, max: 9, placeholder: "6 12 34 56 78", priority: true },
+      { iso: "ES", name: "Espanha", code: "34", mask: [3, 3, 3], min: 9, max: 9, placeholder: "612 345 678", priority: true },
+      { iso: "IT", name: "Itália", code: "39", mask: [3, 3, 4], min: 9, max: 10, placeholder: "312 345 6789", priority: true },
+      { iso: "DE", name: "Alemanha", code: "49", mask: [3, 3, 4, 4], min: 10, max: 14, placeholder: "151 234 5678", priority: true },
+      { iso: "GB", name: "Reino Unido", code: "44", mask: [4, 3, 4], min: 10, max: 11, placeholder: "7911 123 456", priority: true },
+      { iso: "AR", name: "Argentina", code: "54" },
+      { iso: "AU", name: "Austrália", code: "61" },
+      { iso: "AT", name: "Áustria", code: "43" },
+      { iso: "CA", name: "Canadá", code: "1" },
+      { iso: "CL", name: "Chile", code: "56" },
+      { iso: "CN", name: "China", code: "86" },
+      { iso: "CO", name: "Colômbia", code: "57" },
+      { iso: "DK", name: "Dinamarca", code: "45" },
+      { iso: "IE", name: "Irlanda", code: "353" },
+      { iso: "JP", name: "Japão", code: "81" },
+      { iso: "LU", name: "Luxemburgo", code: "352" },
+      { iso: "MX", name: "México", code: "52" },
+      { iso: "NL", name: "Países Baixos", code: "31" },
+      { iso: "PY", name: "Paraguai", code: "595" },
+      { iso: "CH", name: "Suíça", code: "41" },
+      { iso: "US", name: "Estados Unidos", code: "1" },
+      { iso: "UY", name: "Uruguai", code: "598" },
+      { iso: "OTHER", name: "Outro país", code: "", placeholder: "+ DDI e número", other: true }
+    ];
+
+    const sortedPhoneCountries = [
+      ...PHONE_COUNTRIES.filter((country) => country.priority),
+      ...PHONE_COUNTRIES.filter((country) => !country.priority && !country.other).sort((a, b) => a.name.localeCompare(b.name, "pt-BR")),
+      ...PHONE_COUNTRIES.filter((country) => country.other)
+    ];
+
+    function countryLabel(country) {
+      return country.other
+        ? country.name
+        : `${country.name} +${country.code}`;
+    }
+
+    function countryFlagUrl(country, size = 40) {
+      return country.other ? "" : `https://flagcdn.com/w${size}/${country.iso.toLowerCase()}.png`;
+    }
+
+    function updateCountryFlag(combo, country) {
+      const control = combo.querySelector(".country-control");
+      const flag = combo.querySelector("[data-country-flag]");
+      const trigger = combo.querySelector("[data-country-trigger]");
+      control.classList.toggle("is-other", Boolean(country.other));
+
+      if (country.other) {
+        flag.removeAttribute("src");
+        flag.alt = "";
+        trigger.setAttribute("aria-label", "Selecionar outro país");
+        return;
+      }
+
+      flag.src = countryFlagUrl(country);
+      flag.alt = `Bandeira de ${country.name}`;
+      trigger.setAttribute("aria-label", `País selecionado: ${country.name}. Trocar país`);
+    }
+
+    function getCountryByIso(iso) {
+      return PHONE_COUNTRIES.find((country) => country.iso === iso) || PHONE_COUNTRIES[0];
+    }
+
+    function getPhoneCombo(input) {
+      return input.closest("[data-phone-combo]");
+    }
+
+    function getPhoneCountry(input) {
+      const combo = getPhoneCombo(input);
+      const select = combo?.querySelector("[data-country-select]");
+      return getCountryByIso(select?.value || "BR");
+    }
+
+    function getPhoneDigits(value) {
+      return value.replace(/\D/g, "").slice(0, 15);
+    }
+
+    function groupDigits(value, sizes) {
+      const groups = [];
+      let cursor = 0;
+
+      sizes.forEach((size) => {
+        if (value.length > cursor) {
+          groups.push(value.slice(cursor, cursor + size));
+          cursor += size;
+        }
+      });
+
+      if (value.length > cursor) {
+        groups.push(value.slice(cursor));
+      }
+
+      return groups.filter(Boolean);
+    }
+
+    function getLocalDigits(input, country = getPhoneCountry(input)) {
+      let digits = getPhoneDigits(input.value);
+      if (!country.other && country.code && digits.startsWith(country.code) && digits.length > (country.max || 14)) {
+        digits = digits.slice(country.code.length);
+      }
+      return digits.slice(0, country.max || 14);
+    }
+
+    function formatLocalPhone(value, country) {
+      const digits = getPhoneDigits(value);
+      if (!digits) return "";
+
+      if (country.other) {
+        const code = digits.slice(0, Math.min(3, digits.length));
+        const local = digits.slice(code.length);
+        if (!local) return `+${code}`;
+        return `+${code} ${groupDigits(local, [3, 3, 4, 4]).join(" ")}`;
+      }
+
+      let local = digits;
+      if (country.code && local.startsWith(country.code) && local.length > (country.max || 14)) {
+        local = local.slice(country.code.length);
+      }
+      local = local.slice(0, country.max || 14);
+      const mask = country.iso === "BR" && local.length <= 10 ? [2, 4, 4] : (country.mask || [3, 3, 4, 4]);
+      return groupDigits(local, mask).join(" ");
+    }
+
+    function formatPhoneInput(input) {
+      const country = getPhoneCountry(input);
+      input.value = formatLocalPhone(input.value, country);
+      input.placeholder = country.placeholder || "Número local";
+    }
+
+    function formatFullPhone(input) {
+      const country = getPhoneCountry(input);
+      if (country.other) return formatLocalPhone(input.value, country);
+
+      const local = formatLocalPhone(input.value, country);
+      return local ? `+${country.code} ${local}` : "";
+    }
+
+    const countryModal = document.querySelector("#countryModal");
+    const countryList = countryModal.querySelector("[data-country-list]");
+    const countrySearch = countryModal.querySelector("[data-country-search]");
+    const countryClose = countryModal.querySelector("[data-country-close]");
+    let activeCountryCombo = null;
+
+    function setCountry(combo, iso) {
+      const select = combo.querySelector("[data-country-select]");
+      const input = combo.querySelector(".phone-input");
+      select.value = iso;
+      updateCountryFlag(combo, getCountryByIso(select.value));
+      formatPhoneInput(input);
+      select.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+
+    function countryMatches(country, query) {
+      if (!query) return true;
+      const haystack = `${country.name} ${country.iso} ${country.code || ""}`.toLowerCase();
+      return haystack.includes(query);
+    }
+
+    function renderCountryList(query = "") {
+      if (!activeCountryCombo) return;
+
+      const normalizedQuery = query.trim().toLowerCase();
+      const selectedIso = activeCountryCombo.querySelector("[data-country-select]").value;
+      const countries = sortedPhoneCountries.filter((country) => countryMatches(country, normalizedQuery));
+
+      if (!countries.length) {
+        countryList.innerHTML = `<div class="country-option" aria-disabled="true"><span class="country-option-other">?</span><span class="country-option-name"><strong>Nenhum país encontrado</strong><span>Tente buscar pelo nome ou DDI.</span></span><span></span></div>`;
+        return;
+      }
+
+      countryList.innerHTML = countries.map((country) => {
+        const isSelected = country.iso === selectedIso;
+        const media = country.other
+          ? `<span class="country-option-other">+</span>`
+          : `<img class="country-option-flag" src="${countryFlagUrl(country, 40)}" alt="">`;
+        const code = country.other ? "manual" : `+${country.code}`;
+        const helper = country.priority ? "Principal" : (country.other ? "Digite com DDI" : "Outros países");
+        return `
+          <button class="country-option${isSelected ? " is-selected" : ""}" type="button" role="option" aria-selected="${isSelected}" data-country-option="${country.iso}">
+            ${media}
+            <span class="country-option-name">
+              <strong>${country.name}</strong>
+              <span>${helper}</span>
+            </span>
+            <span class="country-option-code">${code}</span>
+          </button>
+        `;
+      }).join("");
+    }
+
+    function openCountryModal(combo) {
+      activeCountryCombo = combo;
+      countryModal.hidden = false;
+      combo.querySelector("[data-country-trigger]").setAttribute("aria-expanded", "true");
+      countrySearch.value = "";
+      renderCountryList();
+      if (!window.matchMedia("(pointer: coarse)").matches) {
+        window.setTimeout(() => countrySearch.focus(), 40);
+      }
+    }
+
+    function closeCountryModal({ focusInput = false } = {}) {
+      if (!activeCountryCombo) return;
+      const combo = activeCountryCombo;
+      combo.querySelector("[data-country-trigger]").setAttribute("aria-expanded", "false");
+      activeCountryCombo = null;
+      countryModal.hidden = true;
+      countrySearch.value = "";
+
+      if (focusInput) {
+        combo.querySelector(".phone-input").focus();
+      } else {
+        combo.querySelector("[data-country-trigger]").focus();
+      }
+    }
+
+    countrySearch.addEventListener("input", () => renderCountryList(countrySearch.value));
+
+    countryList.addEventListener("click", (event) => {
+      const option = event.target.closest("[data-country-option]");
+      if (!option || !activeCountryCombo) return;
+      setCountry(activeCountryCombo, option.dataset.countryOption);
+      closeCountryModal({ focusInput: true });
+    });
+
+    countryClose.addEventListener("click", () => closeCountryModal());
+
+    countryModal.addEventListener("click", (event) => {
+      if (event.target === countryModal) closeCountryModal();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !countryModal.hidden) {
+        event.preventDefault();
+        closeCountryModal();
+      }
+    });
+
+    document.querySelectorAll("[data-phone-combo]").forEach((combo) => {
+      const select = combo.querySelector("[data-country-select]");
+      const input = combo.querySelector(".phone-input");
+      const trigger = combo.querySelector("[data-country-trigger]");
+
+      select.innerHTML = sortedPhoneCountries
+        .map((country) => `<option value="${country.iso}">${countryLabel(country)}</option>`)
+        .join("");
+      select.value = combo.dataset.defaultCountry || "BR";
+
+      const apply = () => {
+        const country = getCountryByIso(select.value);
+        updateCountryFlag(combo, country);
+        formatPhoneInput(input);
+      };
+      select.addEventListener("change", () => {
+        apply();
+        input.focus();
+      });
+      trigger.addEventListener("click", () => openCountryModal(combo));
+      input.addEventListener("input", apply);
+      input.addEventListener("blur", apply);
+      apply();
+    });
+
+    /* ---------------- Validação ---------------- */
+
+    function validateCurrent() {
+      const panel = panels[current];
+      const inputs = [...panel.querySelectorAll("input")];
+      const error = panel.querySelector(".error");
+      if (error) error.textContent = "";
+
+      const radios = inputs.filter((input) => input.type === "radio");
+      if (radios.length) {
+        if (!radios.some((input) => input.checked)) {
+          if (error) error.textContent = "Escolha uma opção para continuar.";
+          return false;
+        }
+        return true;
+      }
+
+      const field = inputs[0];
+      if (!field.value.trim()) {
+        if (error) error.textContent = "Preencha este campo para continuar.";
+        field.focus();
+        return false;
+      }
+
+      if (field.type === "email" && !field.validity.valid) {
+        if (error) error.textContent = "Digite um e-mail válido.";
+        field.focus();
+        return false;
+      }
+
+      if (field.name === "whatsapp") {
+        const country = getPhoneCountry(field);
+        if (getLocalDigits(field, country).length < (country.min || 6)) {
+          if (error) error.textContent = country.other
+            ? "Digite o DDI e o número para continuar."
+            : `Digite um número válido para ${country.name}.`;
+          field.focus();
+          return false;
+        }
+        formatPhoneInput(field);
+      }
+
+      const secondary = panel.querySelector("#secondaryPhone");
+      if (secondary && !optionalPhone.hidden && secondary.value.trim()) {
+        const country = getPhoneCountry(secondary);
+        if (getLocalDigits(secondary, country).length < (country.min || 6)) {
+          if (error) error.textContent = country.other
+            ? "Digite o DDI e o número extra corretamente."
+            : `Digite um número extra válido para ${country.name}.`;
+          secondary.focus();
+          return false;
+        }
+        formatPhoneInput(secondary);
+      }
+
+      return true;
+    }
+
+    function collectCurrent() {
+      panels[current].querySelectorAll("input, select").forEach((input) => {
+        if (input.type === "radio") {
+          if (input.checked) answers[input.name] = input.value;
+        } else if (input.matches(".phone-input")) {
+          answers[input.name] = formatFullPhone(input);
+        } else if (input.matches(".country-select")) {
+          const country = getCountryByIso(input.value);
+          answers[input.name] = country.name;
+          if (!country.other) answers[`${input.name}_ddi`] = `+${country.code}`;
+        } else {
+          answers[input.name] = input.value.trim();
+        }
+      });
+    }
+
+    /* ---------------- Navegação ---------------- */
+
+    function advance() {
+      if (!validateCurrent()) return;
+      collectCurrent();
+      persist("parcial");        // salva a resposta assim que o lead avança
+
+      const stepIndex = steps.indexOf(panels[current]);
+      if (stepIndex === steps.length - 1) {
+        finish();
+      } else {
+        goTo(current + 1);
+      }
+    }
+
+    function startFlow() {
+      if (!validateCurrent()) return;
+      collectCurrent();
+      persist("inicio");
+      goTo(1);
+    }
+
+    function finish() {
+      submitBtn.disabled = true;
+      nextBtn.disabled = true;
+      submitBtn.textContent = "Enviando...";
+
+      persist("completo");       // envio final (todas as respostas)
+
+      progressSegments.forEach((segment) => {
+        segment.classList.add("is-complete");
+        segment.classList.remove("is-active");
+      });
+      window.location.href = THANK_YOU_URL;
+    }
+
+    startBtn.addEventListener("click", startFlow);
+    nextBtn.addEventListener("click", advance);
+    submitBtn.addEventListener("click", advance);
+    prevBtn.addEventListener("click", () => goTo(current - 1));
+
+    addPhoneBtn.addEventListener("click", () => {
+      optionalPhone.hidden = false;
+      addPhoneBtn.hidden = true;
+      window.setTimeout(() => secondaryPhone.focus(), 80);
+    });
+
+    removePhoneBtn.addEventListener("click", () => {
+      secondaryPhone.value = "";
+      optionalPhone.hidden = true;
+      addPhoneBtn.hidden = false;
+      addPhoneBtn.focus();
+    });
+
+    // Rádio: seleciona e avança sozinho (com animação)
+    stage.addEventListener("change", (event) => {
+      if (!event.target.matches("input[type='radio']")) return;
+      window.setTimeout(advance, 220);
+    });
+
+    // Enter avança nos campos de texto
+    form.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && event.target.matches("input")) {
+        event.preventDefault();
+        if (panels[current].hasAttribute("data-intro")) {
+          startFlow();
+        } else {
+          advance();
+        }
+      }
+    });
+
+    // Submit padrão do form (fallback) — avança/finaliza
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      advance();
+    });
+
+    // Atalhos de teclado A–H para as opções
+    document.addEventListener("keydown", (event) => {
+      if (event.target.matches("input:not([type='radio']), select, textarea")) return;
+      if (panels[current].hasAttribute("data-intro")) return;
+
+      const key = event.key.toLowerCase();
+      const choices = [...panels[current].querySelectorAll("input[type='radio']")];
+      if (!choices.length) return;
+
+      const isCountryStep = choices.some((choice) => choice.name === "pais");
+      if (isCountryStep && key.length === 1 && /[a-zà-ú]/i.test(key)) {
+        const match = choices.find((choice) => {
+          const label = choice.closest(".option")?.querySelector("span:last-child")?.textContent?.trim().toLowerCase();
+          return label?.startsWith(key);
+        });
+        if (match) {
+          match.checked = true;
+          match.dispatchEvent(new Event("change", { bubbles: true }));
+          return;
+        }
+      }
+
+      const index = ["a", "b", "c", "d", "e", "f", "g", "h"].indexOf(key);
+      if (index >= 0 && choices[index]) {
+        choices[index].checked = true;
+        choices[index].dispatchEvent(new Event("change", { bubbles: true }));
+      }
+    });
+
+    updateChrome();
+    focusCurrent();
+  </script>
+</body>
+</html>
