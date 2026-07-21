@@ -19,6 +19,9 @@
       --line: rgba(255, 255, 255, 0.14);
       --line-strong: rgba(255, 255, 255, 0.24);
       --white: #FFFFFF;
+      --paper: #f5f3ef;
+      --paper-soft: #f0ede7;
+      --paper-panel: #fbfaf7;
       --muted: rgba(255, 255, 255, 0.68);
       --faint: rgba(255, 255, 255, 0.46);
       --steel: #91A9BC;
@@ -45,7 +48,7 @@
 
     body.is-light {
       color: #080808;
-      background: #f5f3ef;
+      background: var(--paper);
     }
 
     body::selection {
@@ -480,12 +483,12 @@
     }
 
     body.is-light .light-zone {
-      background: #f5f3ef;
+      background: var(--paper);
       color: #080808;
     }
 
     body.is-light .light-zone.alt {
-      background: #ffffff;
+      background: var(--paper-soft);
       border-top-color: rgba(8, 8, 8, 0.09);
       border-bottom-color: rgba(8, 8, 8, 0.09);
     }
@@ -827,7 +830,7 @@
     }
 
     body.is-light .light-zone .portrait-caption {
-      background: rgba(255, 255, 255, 0.82);
+      background: rgba(251, 250, 247, 0.88);
       border-color: rgba(8, 8, 8, 0.1);
     }
 
@@ -837,15 +840,15 @@
 
     body.is-light .light-zone .cta-panel {
       background:
-        linear-gradient(180deg, rgba(237, 28, 36, 0.08), rgba(255, 255, 255, 0.92) 64%),
-        #ffffff;
+        linear-gradient(180deg, rgba(237, 28, 36, 0.08), rgba(251, 250, 247, 0.92) 64%),
+        var(--paper-panel);
       border-color: rgba(8, 8, 8, 0.1);
       box-shadow: 0 22px 60px rgba(12, 12, 12, 0.09);
     }
 
     body.is-light .process-section,
     body.is-light .specialist-section {
-      background: #ffffff;
+      background: var(--paper-panel);
       border-top-color: transparent;
       border-bottom-color: transparent;
     }
@@ -988,8 +991,8 @@
     body.is-light .final-cta-section .cta-panel .btn-primary:hover,
     .final-cta-section .cta-panel .btn-primary:hover {
       color: #070707;
-      background: #f7f7f7;
-      border-color: #f7f7f7;
+      background: var(--paper-panel);
+      border-color: var(--paper-panel);
     }
 
     .site-footer {
@@ -1433,7 +1436,7 @@
 
       const dots = [];
       const colors = [
-        "rgba(255, 255, 255, 0.92)",
+        "rgba(251, 250, 247, 0.92)",
         "rgba(255, 225, 228, 0.9)",
         "rgba(255, 196, 202, 0.82)"
       ];

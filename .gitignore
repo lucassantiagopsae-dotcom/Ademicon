@@ -30,7 +30,7 @@ skills-lock.json
 
 # Legacy/reference files inside the deploy folder
 Infraestrutura/_arquivo/
+Infraestrutura/
 
 # Local thumbnail contact sheet used only for visual review
 assets/testimonials/_preview.jpg
-Infraestrutura/assets/testimonials/_preview.jpg

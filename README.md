@@ -11,9 +11,9 @@ Site estatico pronto para deploy no Vercel.
 - `depoimentos/index.html`: pagina de depoimentos.
 - `assets/`: imagens usadas pelas paginas.
 - `vercel.json`: rotas limpas, headers e redirects.
-- `_arquivo/`: copia antiga da estrutura plana e referencias de design, fora do Git e do deploy.
+- `Infraestrutura/_arquivo/`: copia antiga da estrutura plana e referencias de design, fora do Git e do deploy local.
 
-Esta pasta `Infraestrutura` e a raiz publica do site. As pastas de criativos, videos, PSDs e materiais brutos ficam fora dela ou ignoradas por Git/Vercel para manter o deploy leve.
+Esta raiz do repositorio e a raiz publica do site. As pastas de criativos, videos, PSDs e materiais brutos ficam ignoradas por Git/Vercel para manter o deploy leve.
 
 ## Rodar localmente
 
@@ -35,7 +35,7 @@ npm run check
 
 ## Deploy no Vercel
 
-Conecte este repositorio no Vercel usando `Infraestrutura` como Root Directory. Framework preset: `Other`.
+Conecte este repositorio no Vercel usando a raiz do repositorio como Root Directory. Framework preset: `Other`.
 
 Build Command: deixe vazio.
 
