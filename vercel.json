@@ -1,0 +1,64 @@
+{
+  "buildCommand": "cd Infraestrutura && npm run build",
+  "outputDirectory": "Infraestrutura/public_dist",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/apresentacao-diagnostico-patrimonial",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/apresentacao-diagnostico-patrimonial.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/formulario-ademicon-typeform.html",
+      "destination": "/formulario",
+      "permanent": true
+    },
+    {
+      "source": "/obrigado.html",
+      "destination": "/obrigado",
+      "permanent": true
+    },
+    {
+      "source": "/links-bianca-chechelaki.html",
+      "destination": "/links",
+      "permanent": true
+    },
+    {
+      "source": "/depoimentos-ademicon.html",
+      "destination": "/depoimentos",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/diagnostico",
+      "destination": "/index.html"
+    }
+  ]
+}
