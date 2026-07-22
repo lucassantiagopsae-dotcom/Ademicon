@@ -118,7 +118,19 @@ const requiredAssets = [
   "assets/testimonials/quellison.jpg",
   "assets/testimonials/shirley.jpg",
   "assets/testimonials/wilian-portugal.jpg",
-  "assets/testimonials/willian-belgica.jpg"
+  "assets/testimonials/willian-belgica.jpg",
+  "assets/testimonials/videos/amaro.mp4",
+  "assets/testimonials/videos/angela.mp4",
+  "assets/testimonials/videos/anselmo.mp4",
+  "assets/testimonials/videos/eliel.mp4",
+  "assets/testimonials/videos/evelin.mp4",
+  "assets/testimonials/videos/gaspar.mp4",
+  "assets/testimonials/videos/marcelo.mp4",
+  "assets/testimonials/videos/marina.mp4",
+  "assets/testimonials/videos/quellison.mp4",
+  "assets/testimonials/videos/shirley.mp4",
+  "assets/testimonials/videos/wilian-portugal.mp4",
+  "assets/testimonials/videos/willian-belgica.mp4"
 ];
 
 for (const asset of requiredAssets) {
