@@ -10,7 +10,8 @@ const publicEntries = [
   "obrigado",
   "links",
   "depoimentos",
-  "assets"
+  "assets",
+  "_worker.js"
 ];
 
 rmSync(output, { recursive: true, force: true });
