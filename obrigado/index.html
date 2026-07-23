@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Diagnóstico recebido | Ademicon</title>
+  <title>Diagnóstico preenchido | Ademicon</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -475,7 +475,7 @@
     </div>
   </div>
 
-  <main class="wrap" aria-label="Diagnóstico recebido">
+  <main class="wrap" aria-label="Diagnóstico preenchido">
     <img class="brand-logo" src="/assets/logo-ademicon-form.png" alt="Ademicon crédito">
 
     <section class="hero">
@@ -485,23 +485,23 @@
           <path class="success-check" d="M17 29.5 24.3 36.5 39.5 20"></path>
         </svg>
       </div>
-      <p class="eyebrow">Diagnóstico recebido</p>
-      <h1>Suas respostas chegaram até nós.</h1>
-      <p class="lead">Obrigado por dedicar alguns minutos ao seu diagnóstico patrimonial. A partir daqui, a conversa fica mais objetiva.</p>
+      <p class="eyebrow">Diagnóstico preenchido</p>
+      <h1>Seu diagnóstico está pronto para envio.</h1>
+      <p class="lead">Obrigado por dedicar alguns minutos ao seu diagnóstico patrimonial. Para concluir, envie suas respostas pelo WhatsApp.</p>
 
       <ol class="next-steps">
         <li>
           <span class="step-index">01</span>
           <div>
-            <strong>Análise das respostas</strong>
-            <span>Um especialista revisa seu objetivo, prazo e capacidade mensal.</span>
+            <strong>Respostas registradas</strong>
+            <span>Seu diagnóstico fica salvo nesta etapa para orientar o atendimento.</span>
           </div>
         </li>
         <li>
           <span class="step-index">02</span>
           <div>
-            <strong>Contato pelo WhatsApp</strong>
-            <span>Falamos com você no número informado para entender melhor o seu momento.</span>
+            <strong>Próximo passo pelo WhatsApp</strong>
+            <span>Chame a equipe e avise que você já preencheu o diagnóstico.</span>
           </div>
         </li>
         <li>
@@ -514,13 +514,13 @@
       </ol>
 
       <div class="actions">
-        <p class="action-copy">Se quiser acelerar seu atendimento, chame nossa equipe no WhatsApp e avise que você já preencheu o diagnóstico.</p>
+        <p class="action-copy">O botão abaixo já prepara uma mensagem com as respostas do formulário para a equipe receber seu contexto.</p>
         <div class="action-buttons">
-          <a class="btn-whatsapp" href="https://wa.me/554198538078?text=Ol%C3%A1%2C%20preenchi%20o%20diagn%C3%B3stico%20patrimonial%20da%20Ademicon%20e%20quero%20adiantar%20meu%20atendimento." target="_blank" rel="noopener" aria-label="Chamar a Ademicon no WhatsApp">
+          <a class="btn-whatsapp" id="whatsappBtn" href="https://wa.me/554198538078?text=Ol%C3%A1%2C%20preenchi%20o%20diagn%C3%B3stico%20patrimonial%20da%20Ademicon%20e%20quero%20adiantar%20meu%20atendimento." target="_blank" rel="noopener" aria-label="Enviar diagnóstico pelo WhatsApp">
             <svg class="whatsapp-icon" viewBox="0 0 24 24" aria-hidden="true">
               <path fill="currentColor" d="M12.04 2C6.59 2 2.16 6.42 2.16 11.86c0 1.74.46 3.43 1.33 4.92L2 22l5.35-1.4a9.87 9.87 0 0 0 4.69 1.19h.01c5.44 0 9.87-4.42 9.87-9.86C21.92 6.45 17.49 2 12.04 2Zm0 18.08h-.01a8.2 8.2 0 0 1-4.18-1.14l-.3-.18-3.18.83.85-3.09-.2-.32a8.14 8.14 0 0 1-1.25-4.32 8.27 8.27 0 0 1 8.27-8.24 8.27 8.27 0 0 1 8.27 8.31 8.26 8.26 0 0 1-8.27 8.15Zm4.53-6.18c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.96-.14.17-.29.18-.54.06-.25-.13-1.05-.39-2-1.24-.74-.66-1.24-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.76-1.84-.2-.48-.4-.41-.56-.42h-.47c-.17 0-.43.06-.66.31-.22.25-.86.84-.86 2.04 0 1.2.88 2.37 1 2.53.12.17 1.72 2.63 4.18 3.69.58.25 1.04.4 1.39.51.59.19 1.12.16 1.54.1.47-.07 1.47-.6 1.67-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.16-.48-.28Z"></path>
             </svg>
-            Chamar no WhatsApp
+            Enviar pelo WhatsApp
           </a>
           <a class="btn-secondary" href="/">Voltar para o início</a>
         </div>
@@ -529,5 +529,47 @@
       <p class="fine-print">A análise não promete contemplação, rentabilidade ou aprovação. Ela serve para entender possibilidades conforme perfil, prazo e capacidade mensal.</p>
     </section>
   </main>
+  <script>
+    const STORAGE_KEY = "ademicon_diagnostico";
+    const WHATSAPP_NUMBER = "554198538078";
+    const whatsappBtn = document.querySelector("#whatsappBtn");
+
+    function getStoredAnswers() {
+      try {
+        return JSON.parse(sessionStorage.getItem(STORAGE_KEY) || "null");
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function formatAnswer(label, value) {
+      return value ? `${label}: ${value}` : "";
+    }
+
+    function buildWhatsappText(answers) {
+      if (!answers) {
+        return "Olá, preenchi o diagnóstico patrimonial da Ademicon e quero adiantar meu atendimento.";
+      }
+
+      return [
+        "Olá, preenchi o diagnóstico patrimonial da Ademicon.",
+        "",
+        "Minhas respostas:",
+        formatAnswer("Nome", answers.nome),
+        formatAnswer("E-mail", answers.email),
+        formatAnswer("WhatsApp", answers.whatsapp),
+        formatAnswer("WhatsApp extra", answers.whatsapp_secundario),
+        formatAnswer("País onde moro", answers.pais),
+        formatAnswer("Objetivo", answers.objetivo),
+        formatAnswer("Investimento mensal", answers.investimento_mensal),
+        formatAnswer("Prazo", answers.prazo),
+        "",
+        "Quero conversar com a equipe para entender o melhor caminho."
+      ].filter(Boolean).join("\n");
+    }
+
+    const answers = getStoredAnswers();
+    whatsappBtn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(buildWhatsappText(answers))}`;
+  </script>
 </body>
 </html>
