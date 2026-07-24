@@ -17,7 +17,12 @@ const mimeTypes = {
   ".webp": "image/webp",
   ".gif": "image/gif",
   ".svg": "image/svg+xml",
-  ".ico": "image/x-icon"
+  ".ico": "image/x-icon",
+  ".vtt": "text/vtt; charset=utf-8",
+  ".mp4": "video/mp4",
+  ".mov": "video/quicktime",
+  ".m4v": "video/mp4",
+  ".webm": "video/webm"
 };
 
 const cleanRoutes = {

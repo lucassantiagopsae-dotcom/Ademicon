@@ -1106,6 +1106,10 @@
       return VIDEO_BASE ? VIDEO_BASE + item.file : "";
     }
 
+    function captionUrl(item) {
+      return VIDEO_BASE ? VIDEO_BASE + item.file.replace(/\.mp4$/i, ".vtt") : "";
+    }
+
     function thumbnailUrl(item) {
       return `/assets/testimonials/${item.file.replace(/\.[^.]+$/, ".jpg")}`;
     }
@@ -1160,11 +1164,23 @@
       const url = videoUrl(item);
 
       modalStage.innerHTML = url
-        ? `<video src="${escapeHtml(url)}" controls autoplay playsinline></video>`
+        ? `<video src="${escapeHtml(url)}" controls autoplay playsinline><track kind="captions" srclang="pt" label="Português" src="${escapeHtml(captionUrl(item))}" default></video>`
         : `<div class="modal-placeholder">
              <strong>Prévia</strong>
              <span>Defina <code>VIDEO_BASE</code> no início do script para tocar o vídeo de ${escapeHtml(item.nome)} (arquivo ${escapeHtml(item.file)}).</span>
            </div>`;
+
+      // Legenda sempre ativa (não depende da preferência de CC do navegador).
+      const videoEl = modalStage.querySelector("video");
+      if (videoEl) {
+        const forceCaptions = () => {
+          const track = videoEl.textTracks && videoEl.textTracks[0];
+          if (track) track.mode = "showing";
+        };
+        forceCaptions();
+        videoEl.addEventListener("loadedmetadata", forceCaptions);
+        videoEl.textTracks.addEventListener("addtrack", forceCaptions);
+      }
 
       modalCaption.innerHTML = `<strong>${escapeHtml(item.titulo)}</strong><span>${escapeHtml(item.nome)}${item.local ? " • " + escapeHtml(item.local) : ""}</span>`;
 
