@@ -52,76 +52,52 @@ estiverem definidas, o site sobe sem pixel no navegador e o build avisa.
 
 ---
 
-## O que falta fazer (precisa do dashboard da Cloudflare)
+## Estado atual: NO AR e funcionando
 
-Estes passos exigem acesso à conta Cloudflare da cliente e às contas de anúncio.
-Nada aqui pode ser feito pelo repositório.
+Provisionado e verificado em producao em 07/09/2026. Nada aqui esta pendente.
 
-### 1. Criar o banco D1 e aplicar as migrations
+| Item | Estado |
+|---|---|
+| Banco D1 `ademicon-db` | criado (`ff93ad40-d130-461f-b927-fd159b0f7d86`, regiao ENAM) |
+| 14 migrations | aplicadas |
+| Binding `DB` no projeto Pages | ligado em Production |
+| Build command / output | `npm run build` / `public_dist` |
+| `META_PIXEL_ID` | ja existia, texto plano (o build precisa ler) |
+| `META_ACCESS_TOKEN` | ja existia, encriptada |
+| `DASH_KEY` | gerada e gravada como secret |
+| Deploy | `5f1bf2b`, sucesso |
 
-```bash
-npx wrangler@latest login
-npx wrangler@latest d1 create ademicon-db
+Verificacao feita contra `https://pg.mapapatrimonial.com.br`:
+
+- Cookies `_rugido_sid`, `_rugido_eid`, `_fbp`, `_fbc` sendo gravados, com
+  `fb.2.` — o indice correto para dominio `.com.br`.
+- UTM e `fbclid` persistidos na tabela `sessions`.
+- Formulario preenchido de ponta a ponta: o Meta respondeu
+  `{"events_received":1}` ao Lead, com `utm_source` e `utm_campaign` amarrados.
+- `/api/*` retorna 401 sem a chave e 200 com ela.
+- Link-bio intacto: raiz serve a pagina da Bianca, outras rotas redirecionam
+  para `/links/`, e os endpoints de tracking passam sem rewrite.
+
+O lead de teste foi apagado do D1 depois da verificacao. Um evento de Lead de
+teste permanece registrado no Events Manager do Meta — nao da para apagar de
+la, e e esperado.
+
+### Dashboard
+
+```
+https://pg.mapapatrimonial.com.br/dash/?key=<DASH_KEY>
 ```
 
-Copie `wrangler.toml.example` para `wrangler.toml` e preencha os três campos
-`__REPLACE_ME_*__` com o nome do projeto e o `database_id` que o comando acima
-imprimiu. O `wrangler.toml` é gitignored — não vai para o repositório.
+A chave esta em `.dash-key.local` (gitignored) e deve ser movida para um
+gerenciador de senhas. Para trocar: `npx wrangler pages secret put DASH_KEY
+--project-name ademicon`.
 
-```bash
-npx wrangler@latest d1 migrations apply ademicon-db --remote
-```
+### Unico opcional nao configurado: GA4
 
-### 2. Ajustar o build do projeto Pages
-
-No projeto `ademicon` → **Settings → Builds**:
-
-- Build command: `npm run build`
-- Build output directory: `public_dist`
-
-### 3. Ligar o banco ao projeto
-
-**Settings → Bindings → Add → D1 database**
-
-- Variable name: `DB` (exatamente assim — o código lê `env.DB`)
-- Database: `ademicon-db`
-- Aplicar em: Production (e Preview, se usar)
-
-### 4. Variáveis de ambiente
-
-**Settings → Environment variables**, todas em Production. Marque *Encrypt*
-nas linhas com 🔒.
-
-**Obrigatórias:**
-
-| Nome | Onde pegar | 🔒 |
-|---|---|---|
-| `META_PIXEL_ID` | Meta Events Manager → seu Pixel → topo da página | não |
-| `META_ACCESS_TOKEN` | Events Manager → Pixel → Configurações → Gerar token de acesso | 🔒 |
-| `DASH_KEY` | gere com `openssl rand -hex 32` e guarde no gerenciador de senhas | 🔒 |
-
-`META_PIXEL_ID` precisa ficar **sem** encrypt: o build lê essa variável para
-injetar o ID nas páginas, e variável encriptada não fica disponível no build.
-
-**Opcionais (GA4 — as duas juntas ou nenhuma):**
-
-| Nome | Onde pegar | 🔒 |
-|---|---|---|
-| `GA4_MEASUREMENT_ID` | GA4 → Admin → Fluxos de dados (`G-XXXXXXXXXX`) | não |
-| `GA4_API_SECRET` | mesmo lugar → Measurement Protocol API secrets → Criar | 🔒 |
-
-Não precisa mexer em `TIMEZONE_OFFSET` nem `DEFAULT_COUNTRY_CODE`: os padrões
-já são `-03:00` e `55` (Brasil).
-
-**Não configure** os webhooks de Eduzz/Hotmart/Kiwify — não há checkout neste
-site. Sem os slugs, esses endpoints ficam inertes.
-
-### 5. Redeploy
-
-Variável nova não vale para deploy antigo. **Deployments → Retry deployment**,
-ou simplesmente faça um push novo.
-
----
+`GA4_MEASUREMENT_ID` e `GA4_API_SECRET` nao existem no projeto. Sem elas o
+GA4 e simplesmente pulado — Meta funciona normalmente. Para ligar, adicione as
+duas em **Settings → Environment variables** (a primeira em texto plano, a
+segunda encriptada) e refaca o deploy.
 
 ## Como verificar depois de subir
 
@@ -147,7 +123,7 @@ npx wrangler@latest pages dev public_dist --port 8899
 
 ---
 
-## Duas coisas que este trabalho NÃO resolve
+## Duas coisas que continuam em aberto
 
 **1. As respostas do formulário continuam sem destino.**
 `SAVE_ENDPOINT` em `formulario/index.html` ainda está vazio. O tracking grava
