@@ -19,7 +19,9 @@ public_dist/
 
 # Local Codex/agent workspace
 .agents/
-.claude/
+.claude/*
+# ...menos as skills do tracking stack, que devem viajar com o repo
+!.claude/skills/
 
 # Local archive/reference files
 _arquivo/
@@ -27,3 +29,11 @@ _materiais-brutos/
 
 # Local thumbnail contact sheet used only for visual review
 assets/testimonials/_preview.jpg
+
+# Tracking stack — config local do wrangler (contem o database_id do D1)
+# e segredos de desenvolvimento. Apenas wrangler.toml.example e versionado.
+wrangler.toml
+.dev.vars
+
+# Estado local do wrangler (cache de dev)
+.wrangler/

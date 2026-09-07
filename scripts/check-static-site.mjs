@@ -2,7 +2,36 @@ import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, extname, join, relative, resolve, sep } from "node:path";
 
 const root = resolve(".");
-const ignoredDirectories = new Set(["_arquivo", "public_dist", "node_modules", ".git", ".vercel"]);
+// Pastas que nao fazem parte da saida publica validada: arquivo morto,
+// materiais de trabalho, entregas de criativos, codigo de edge e docs.
+const ignoredDirectories = new Set([
+  "_arquivo",
+  "_materiais-brutos",
+  "entregas",
+  "public_dist",
+  "node_modules",
+  ".git",
+  ".vercel",
+  ".claude",
+  ".agents",
+  "docs",
+  "functions",
+  "migrations",
+  "config",
+  "scripts",
+  "dash"
+]);
+
+// Rotas que nao existem como arquivo no disco: sao servidas em runtime pelas
+// Cloudflare Pages Functions em functions/. Nao devem ser checadas no FS.
+const functionRoutes = [
+  "/tracker",
+  "/scripts/",
+  "/api/",
+  "/webhook/",
+  "/checkout-session",
+  "/dash"
+];
 
 function listHtmlFiles(directory) {
   const files = [];
@@ -52,6 +81,7 @@ function cleanReference(reference) {
 
 function checkLocalReference(file, reference) {
   if (!reference || isExternal(reference) || reference.startsWith("javascript:")) return;
+  if (functionRoutes.some((route) => reference.startsWith(route))) return;
   if (reference.includes("${") || reference.includes("{{")) return;
 
   const clean = cleanReference(reference);

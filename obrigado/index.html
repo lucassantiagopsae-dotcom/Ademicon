@@ -464,6 +464,76 @@
       }
     }
   </style>
+  <!-- ─── Tracking Rugido — Meta Pixel + GA4 first-party ─────────────────
+       Os IDs abaixo sao placeholders substituidos no build a partir das
+       variaveis de ambiente META_PIXEL_ID e GA4_MEASUREMENT_ID do projeto
+       no Cloudflare Pages (ver scripts/build-static-site.mjs). Nao edite
+       os IDs aqui — edite as env vars.
+
+       Os cookies de atribuicao (_rugido_sid, _fbp, _fbc) sao gravados
+       antes disso, no edge, por functions/_middleware.js.
+  -->
+  <script>
+    window.RUGIDO_TRACKING = {
+      metaPixelId: "__META_PIXEL_ID__",
+      ga4MeasurementId: "__GA4_MEASUREMENT_ID__"
+    };
+  </script>
+  <script>
+    (function () {
+      var cfg = window.RUGIDO_TRACKING || {};
+
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () { window.dataLayer.push(arguments); };
+
+      // GA4 carregado como first-party via /scripts/gtag.js, que e um proxy
+      // do googletagmanager feito por Pages Function. Carregar gtag como
+      // third-party e bloqueado por ad-blocker.
+      if (cfg.ga4MeasurementId) {
+        var g = document.createElement("script");
+        g.async = true;
+        g.src = "/scripts/gtag.js?id=" + encodeURIComponent(cfg.ga4MeasurementId);
+        document.head.appendChild(g);
+        window.gtag("js", new Date());
+        window.gtag("config", cfg.ga4MeasurementId);
+      }
+
+      if (cfg.metaPixelId) {
+        !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+        n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+        document,'script','https://connect.facebook.net/en_US/fbevents.js');
+        window.fbq('init', cfg.metaPixelId);
+      }
+
+      // PageView disparado nos dois lados com o mesmo event_id, para o Meta
+      // deduplicar. O /tracker nao grava PageView no D1 e nao repassa
+      // PageView ao GA4 (o gtag do navegador ja cuida disso).
+      var pvEventId = (window.crypto && crypto.randomUUID)
+        ? crypto.randomUUID()
+        : "pv_" + Date.now() + "_" + Math.random().toString(16).slice(2);
+
+      if (window.fbq) {
+        try { window.fbq("track", "PageView", {}, { eventID: pvEventId }); } catch (e) {}
+      }
+
+      try {
+        fetch("/tracker", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            event_name: "PageView",
+            event_id: pvEventId,
+            event_time: Math.floor(Date.now() / 1000),
+            event_source_url: window.location.href
+          }),
+          keepalive: true
+        }).catch(function () {});
+      } catch (e) {}
+    })();
+  </script>
+  <!-- ─── fim do tracking ──────────────────────────────────────────────── -->
 </head>
 <body>
   <div class="success-splash" aria-hidden="true">
