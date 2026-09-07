@@ -88,9 +88,19 @@ la, e e esperado.
 https://pg.mapapatrimonial.com.br/dash/?key=<DASH_KEY>
 ```
 
-A chave esta em `.dash-key.local` (gitignored) e deve ser movida para um
-gerenciador de senhas. Para trocar: `npx wrangler pages secret put DASH_KEY
---project-name ademicon`.
+A chave atual e `1234`, definida a pedido do cliente para facilitar o acesso.
+
+> **Atencao:** este painel expone e-mail, telefone e nome completo dos leads em
+> texto puro, e uma chave curta e trivial de adivinhar. Se o volume de leads
+> crescer ou o endereco vazar, troque por uma chave forte:
+>
+> ```bash
+> node -e 'console.log(require("crypto").randomBytes(32).toString("hex"))'
+> npx wrangler pages secret put DASH_KEY --project-name ademicon
+> ```
+>
+> Trocar a chave exige um redeploy para valer (variavel nova nao se aplica a
+> deploy existente).
 
 ### Unico opcional nao configurado: GA4
 
