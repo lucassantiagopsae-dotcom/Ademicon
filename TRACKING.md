@@ -6,8 +6,8 @@ Cloudflare da cliente. Substitui Stape/GTM Server-Side. Baseado no stack
 — a versão importada está em `.tracking-stack-version`.
 
 O que ele entrega: cookies first-party de 400 dias que sobrevivem ao ITP do
-Safari, evento de Lead enviado pelo servidor (imune a ad-blocker), e a UTM de
-origem gravada junto de cada lead.
+Safari, evento de Lead enviado pelo servidor (imune a ad-blocker), UTM de
+origem gravada junto de cada lead e retorno de etapas-chave do CRM para a Meta.
 
 ---
 
@@ -31,9 +31,10 @@ comportamento. Se precisar mexer no roteamento do link-bio, é lá.
 |---|---|---|
 | Edge | `functions/_middleware.js` | Roteia o link-bio, gera `_rugido_sid`/`_fbp`/`_fbc`, captura UTMs e `fbclid`, grava em `sessions` |
 | Endpoint | `functions/tracker.js` | Recebe os eventos do navegador, faz SHA-256 do PII, dispara Meta CAPI + GA4 |
+| CRM webhook | `functions/webhook/crm/highlevel/<slug>` | Recebe mudancas de etapa do CRM e devolve eventos para a Meta |
 | Proxy | `functions/scripts/[[path]].js` | Serve o gtag.js como first-party (third-party morre em ad-blocker) |
-| Dashboard | `dash/index.html` → `/dash?key=…` | Leads, UTMs e saúde do tracking |
-| Banco | `migrations/` → D1 | `sessions`, `event_log` e as demais tabelas |
+| Dashboard | `dash/index.html` -> `/dash?key=...` | Leads, UTMs e saude do tracking |
+| Banco | `migrations/` -> D1 | `sessions`, `event_log`, `crm_log` e as demais tabelas |
 
 Nas páginas HTML, o bloco de tracking fica antes do `</head>` e está marcado
 com `Tracking Rugido`. O evento de **Lead** dispara no fim do formulário
@@ -109,6 +110,54 @@ GA4 e simplesmente pulado — Meta funciona normalmente. Para ligar, adicione as
 duas em **Settings → Environment variables** (a primeira em texto plano, a
 segunda encriptada) e refaca o deploy.
 
+### Retorno do CRM para a Meta
+
+O caminho correto para o funil da Ademicon e:
+
+1. A Meta manda o clique para a pagina.
+2. O site dispara `Lead` para a Meta e grava o lead no D1 com e-mail, nome,
+   telefone, UTMs, `fbp`, `fbc`, IP e user-agent.
+3. O lead entra no CRM/pipeline da cliente pelo fluxo comercial existente.
+4. Quando a oportunidade muda para uma etapa importante, o CRM chama o webhook
+   da Cloudflare.
+5. A Cloudflare reencontra o lead original e envia o evento server-side para a
+   Meta usando o mesmo contexto de origem.
+
+Pipeline operacional confirmado:
+
+| Etapa no CRM | Evento Meta |
+|---|---|
+| `Reunião Agendada` | `Schedule` |
+| `Venda Realizada` | `Purchase` |
+
+Variaveis que precisam existir em **Cloudflare Pages -> Settings ->
+Environment variables**:
+
+| Variavel | Valor |
+|---|---|
+| `CRM_PROVIDER` | `highlevel` |
+| `HIGHLEVEL_WEBHOOK_SLUG` | UUID longo e secreto, usado na URL do webhook |
+| `CRM_STAGE_EVENTS` | `{"Reunião Agendada":"Schedule","Venda Realizada":"Purchase"}` |
+| `CRM_FUNNEL_EVENTS` | `["Lead","Schedule","Purchase"]` |
+| `CRM_CURRENCY` | `BRL` |
+
+URL de webhook:
+
+```text
+https://pg.mapapatrimonial.com.br/webhook/crm/highlevel/<HIGHLEVEL_WEBHOOK_SLUG>
+```
+
+No CRM, criar dois workflows no pipeline `Pipeline`:
+
+| Workflow | Trigger | Payload minimo |
+|---|---|---|
+| Ademicon - Meta CAPI - Reuniao Agendada | oportunidade mudou para `Reunião Agendada` | `stage`, `contact_id`, `opportunity_id`, `email`, `phone`, `name`, `value` |
+| Ademicon - Meta CAPI - Venda Realizada | oportunidade mudou para `Venda Realizada` | `stage`, `contact_id`, `opportunity_id`, `email`, `phone`, `name`, `value` |
+
+O webhook aceita payloads flexiveis do HighLevel/LeadConnector. Ainda assim,
+para reduzir ambiguidade, prefira mandar o campo `stage` literalmente como a
+etapa que acionou o workflow.
+
 ## Como verificar depois de subir
 
 1. Abra o site com `?utm_source=teste&fbclid=abc123` no fim da URL.
@@ -135,12 +184,12 @@ npx wrangler@latest pages dev public_dist --port 8899
 
 ## Duas coisas que continuam em aberto
 
-**1. As respostas do formulário continuam sem destino.**
+**1. As respostas completas do diagnostico continuam sem destino unico.**
 `SAVE_ENDPOINT` em `formulario/index.html` ainda está vazio. O tracking grava
 que houve um lead e de qual campanha ele veio, mas **não** grava as respostas
 do diagnóstico (objetivo, prazo, investimento mensal, país). Hoje elas só vivem
 no `sessionStorage` do navegador do próprio lead e se perdem. Precisa de um
-destino — CRM, planilha, n8n ou uma tabela nova no próprio D1.
+destino unico — CRM, planilha, n8n ou uma tabela nova no próprio D1.
 
 **2. O `vercel.json` está morto.**
 O site é servido pelo Cloudflare Pages, que ignora esse arquivo. Os seis
