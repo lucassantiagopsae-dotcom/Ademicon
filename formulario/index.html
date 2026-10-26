@@ -1716,17 +1716,19 @@
 
     /* ---------------- Evento de Lead (Meta CAPI + GA4) ---------------- */
 
-    // Dispara o Lead nos dois lados com o MESMO event_id: o pixel do
-    // navegador e o /tracker no servidor. O Meta deduplica pelo event_id,
-    // entao nao conta duas conversoes.
+    // Envia primeiro ao /tracker e so confirma o pixel depois de receber
+    // 200 + { ok: true }. Os dois lados usam o MESMO event_id, para o Meta
+    // deduplicar sem contar duas conversoes. Em caso de falha, uma nova
+    // tentativa reutiliza o mesmo ID.
     //
     // O PII vai nas chaves exatas que o Meta espera (em / ph / fn / ln). O
     // /tracker normaliza e aplica SHA-256 antes de enviar ao Meta — nenhum
     // dado cru de lead sai da infraestrutura da Ademicon.
-    function trackLead() {
-      const eventId = (window.crypto && crypto.randomUUID)
+    const leadEventId = (window.crypto && crypto.randomUUID)
         ? crypto.randomUUID()
         : "lead_" + Date.now() + "_" + Math.random().toString(16).slice(2);
+
+    async function trackLead() {
 
       const nome = (answers.nome || "").trim();
       const partes = nome ? nome.split(" ").filter(Boolean) : [];
@@ -1739,51 +1741,78 @@
         if (partes.length > 1) userData.ln = partes.slice(1).join(" ");
       }
 
-      if (window.fbq) {
-        try { window.fbq("track", "Lead", {}, { eventID: eventId }); } catch (e) { /* pixel bloqueado */ }
-      }
+      const controller = new AbortController();
+      const timeoutId = window.setTimeout(() => controller.abort(), 10000);
 
-      return fetch("/tracker", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          event_name: "Lead",
-          event_id: eventId,
-          event_time: Math.floor(Date.now() / 1000),
-          event_source_url: window.location.href,
-          user_data: userData
-        }),
-        keepalive: true
-      }).catch(() => { /* nunca travar o lead por causa do tracking */ });
+      try {
+        const response = await fetch("/tracker", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            event_name: "Lead",
+            event_id: leadEventId,
+            event_time: Math.floor(Date.now() / 1000),
+            event_source_url: window.location.href,
+            user_data: userData
+          }),
+          signal: controller.signal
+        });
+
+        let responseData = null;
+        try { responseData = await response.json(); } catch (e) { /* resposta invalida */ }
+
+        if (!response.ok || responseData?.ok !== true) {
+          throw new Error("O servidor nao confirmou o evento Lead.");
+        }
+
+        if (window.fbq) {
+          try { window.fbq("track", "Lead", {}, { eventID: leadEventId }); } catch (e) { /* pixel bloqueado */ }
+        }
+
+        return { eventId: leadEventId, response: responseData };
+      } finally {
+        window.clearTimeout(timeoutId);
+      }
     }
 
-    async function finish() {
-      submitBtn.disabled = true;
-      nextBtn.disabled = true;
-      submitBtn.textContent = "Enviando...";
+    let finishPromise = null;
 
-      persist("completo");       // envio final (todas as respostas)
+    function finish() {
+      if (finishPromise) return finishPromise;
 
-      progressSegments.forEach((segment) => {
-        segment.classList.add("is-complete");
-        segment.classList.remove("is-active");
-      });
+      finishPromise = (async () => {
+        submitBtn.disabled = true;
+        nextBtn.disabled = true;
+        submitBtn.textContent = "Enviando...";
 
-      // Espera o Lead server-side, mas com teto de 2s: se o tracking cair
-      // ou demorar, o lead vai para a pagina de obrigado do mesmo jeito.
-      try {
-        await Promise.race([
-          trackLead(),
-          new Promise((resolve) => window.setTimeout(resolve, 2000))
-        ]);
-      } catch (e) { /* segue o fluxo */ }
+        persist("completo");       // salva localmente todas as respostas
 
-      window.location.href = THANK_YOU_URL;
+        try {
+          await trackLead();
+
+          progressSegments.forEach((segment) => {
+            segment.classList.add("is-complete");
+            segment.classList.remove("is-active");
+          });
+
+          window.location.href = THANK_YOU_URL;
+        } catch (e) {
+          const error = panels[current]?.querySelector(".error");
+          if (error) {
+            error.textContent = "Nao foi possivel enviar agora. Confira sua conexao e tente novamente.";
+          }
+          submitBtn.disabled = false;
+          nextBtn.disabled = false;
+          submitBtn.textContent = "Tentar novamente";
+          finishPromise = null;
+        }
+      })();
+
+      return finishPromise;
     }
 
     startBtn.addEventListener("click", startFlow);
     nextBtn.addEventListener("click", advance);
-    submitBtn.addEventListener("click", advance);
     prevBtn.addEventListener("click", () => goTo(current - 1));
 
     addPhoneBtn.addEventListener("click", () => {
@@ -1802,6 +1831,8 @@
     // Rádio: seleciona e avança sozinho (com animação)
     stage.addEventListener("change", (event) => {
       if (!event.target.matches("input[type='radio']")) return;
+      const stepIndex = steps.indexOf(panels[current]);
+      if (stepIndex === steps.length - 1) return;
       window.setTimeout(advance, 220);
     });
 

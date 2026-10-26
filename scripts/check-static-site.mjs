@@ -126,6 +126,36 @@ const requiredPages = [
   "depoimentos/index.html"
 ];
 
+const leadFormHtml = readFileSync(join(root, "formulario/index.html"), "utf8");
+const leadTrackerStart = leadFormHtml.indexOf("async function trackLead()");
+const leadTrackerEnd = leadFormHtml.indexOf("let finishPromise = null", leadTrackerStart);
+const leadTrackerSource = leadTrackerStart >= 0 && leadTrackerEnd > leadTrackerStart
+  ? leadFormHtml.slice(leadTrackerStart, leadTrackerEnd)
+  : "";
+
+if (!leadFormHtml.includes("const leadEventId =")) {
+  problems.push("formulario/index.html: evento Lead sem ID estavel para retry/deduplicacao");
+}
+
+if (!leadFormHtml.includes("let finishPromise = null")) {
+  problems.push("formulario/index.html: envio final sem trava contra chamadas concorrentes");
+}
+
+const trackerFetchIndex = leadTrackerSource.indexOf('fetch("/tracker"');
+const trackerAckIndex = leadTrackerSource.indexOf("responseData?.ok !== true");
+const pixelLeadIndex = leadTrackerSource.indexOf('fbq("track", "Lead"');
+if (!(trackerFetchIndex >= 0 && trackerAckIndex > trackerFetchIndex && pixelLeadIndex > trackerAckIndex)) {
+  problems.push("formulario/index.html: pixel Lead deve ocorrer somente apos confirmacao do /tracker");
+}
+
+if (leadTrackerSource.includes("Promise.race")) {
+  problems.push("formulario/index.html: envio Lead nao pode redirecionar por timeout sem confirmacao");
+}
+
+if (!leadFormHtml.includes("if (stepIndex === steps.length - 1) return;")) {
+  problems.push("formulario/index.html: ultima resposta nao pode disparar Lead antes do submit explicito");
+}
+
 for (const page of requiredPages) {
   if (!existsSync(join(root, page))) {
     problems.push(`pagina obrigatoria ausente -> ${page}`);

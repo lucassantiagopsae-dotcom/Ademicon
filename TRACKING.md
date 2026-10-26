@@ -38,8 +38,10 @@ comportamento. Se precisar mexer no roteamento do link-bio, é lá.
 
 Nas páginas HTML, o bloco de tracking fica antes do `</head>` e está marcado
 com `Tracking Rugido`. O evento de **Lead** dispara no fim do formulário
-(função `trackLead()` em `formulario/index.html`), nos dois lados — pixel do
-navegador e servidor — com o mesmo `event_id`, para o Meta deduplicar.
+(função `trackLead()` em `formulario/index.html`). O servidor confirma primeiro
+`200` com `{"ok":true}`; somente então o pixel do navegador dispara com o mesmo
+`event_id`, para o Meta deduplicar. Chamadas concorrentes compartilham uma única
+promessa e retries reutilizam o mesmo ID, evitando dupla contagem.
 
 ### Os IDs de pixel não ficam no HTML
 
