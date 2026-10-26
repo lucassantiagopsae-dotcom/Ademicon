@@ -203,8 +203,24 @@ export async function onRequestPost(context) {
       })()
     );
 
-    return new Response(JSON.stringify({ ok: true }), {
-      status: 200,
+    // A Lead submit must only be acknowledged after Meta accepts the CAPI
+    // event. The form uses this response to decide whether it can fire the
+    // matching browser pixel and redirect. Other event types keep the legacy
+    // best-effort response contract.
+    const requiresMetaAcknowledgement = loggedEventName === 'lead';
+    const metaDeliveryAccepted = metaResponseOk === 1 && (() => {
+      try {
+        return Number(JSON.parse(metaResponseBody)?.events_received) >= 1;
+      } catch {
+        return false;
+      }
+    })();
+    const responseOk = !requiresMetaAcknowledgement || metaDeliveryAccepted;
+
+    return new Response(JSON.stringify(responseOk
+      ? { ok: true }
+      : { ok: false, error: 'meta_delivery_failed', meta_status_code: metaStatusCode }), {
+      status: responseOk ? 200 : 502,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
